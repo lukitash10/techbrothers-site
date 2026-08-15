@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/lucas/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/09af903c-63fa-4374-8290-6bf0daf86b07/1dbbba89-2bfa-4b51-a91c-f697205231df/skills/ui-ux-pro-max/**)",
+      "Bash(python3 scripts/search.py \"b2b saas ai automation dark neon tech landing page\" --design-system -p \"TechBrothers\" -f markdown)",
+      "Bash(python scripts/search.py \"b2b saas ai automation dark neon tech landing page\" --design-system -p \"TechBrothers\" -f markdown)",
+      "Bash(where python:*)",
+      "Bash(where py:*)",
+      "Bash(py --version)"
+    ]
+  }
+}

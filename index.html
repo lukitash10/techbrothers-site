@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Techbrothers — Automatización con IA para empresas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* =========================================
+   TOKENS
+========================================= */
+    :root {
+      --bg: #070b12;
+      --bg-2: #0c1220;
+      --bg-card: rgba(255, 255, 255, .035);
+      --neon: #4f6ef7;
+      --neon-mid: #6d85ff;
+      --neon-glow: rgba(79, 110, 247, .35);
+      --purple: #8b5cf6;
+      --cyan: #22d3ee;
+      --wa: #22c55e;
+      --wa-dark: #16a34a;
+      --glass: rgba(255, 255, 255, .05);
+      --glass-b: rgba(255, 255, 255, .09);
+      --text: #e2e8f0;
+      --text-muted: rgba(226, 232, 240, .48);
+      --line: rgba(255, 255, 255, .08);
+      --white: #ffffff;
+
+      --f-display: 'Bricolage Grotesque', sans-serif;
+      --f-body: 'Instrument Sans', sans-serif;
+
+      --ease-out: cubic-bezier(.22, .68, 0, 1.2);
+      --ease-soft: cubic-bezier(.4, 0, .2, 1);
+
+      --r-sm: 10px;
+      --r-md: 16px;
+      --r-lg: 24px;
+      --r-xl: 36px;
+    }
+
+    /* =========================================
+   RESET + BASE
+========================================= */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: var(--f-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =========================================
+   NOISE TEXTURE
+========================================= */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: .022;
+    }
+
+    /* =========================================
+   NAV
+========================================= */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      height: 60px;
+      background: rgba(7, 11, 18, .88);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+    }
+
+    .nav::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(79, 110, 247, .15) 15%,
+          var(--neon) 40%,
+          var(--cyan) 60%,
+          rgba(79, 110, 247, .15) 85%,
+          transparent 100%);
+      background-size: 200% 100%;
+      animation: navShimmer 6s linear infinite;
+    }
+
+    @keyframes navShimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    .nav-logo {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -.03em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity .2s;
+    }
+
+    .nav-logo:hover {
+      opacity: .8;
+    }
+
+    .logo-tech {
+      background: linear-gradient(90deg, var(--white) 0%, var(--neon-mid) 30%, var(--white) 60%, var(--neon-mid) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: logo-shine 3s linear infinite;
+    }
+
+    @keyframes logo-shine {
+      from {
+        background-position: 0% center;
+      }
+
+      to {
+        background-position: 200% center;
+      }
+    }
+
+    .logo-brothers {
+      color: var(--text-muted);
+    }
+
+    .nav-logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 8px var(--neon);
+      display: inline-block;
+      animation: blink 2.4s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: .3;
+        transform: scale(.65);
+      }
+    }
+
+    .nav-links {
+      display: none;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color .2s;
+      letter-spacing: .01em;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 1.5px;
+      background: linear-gradient(90deg, var(--neon), var(--cyan));
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s var(--ease-out);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.nav-active {
+      color: var(--white);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.nav-active::after {
+      transform: scaleX(1);
+    }
+
+    .nav-wa {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--wa);
+      color: var(--white);
+      font-weight: 600;
+      font-size: .8rem;
+      padding: .5rem 1.1rem;
+      border-radius: 50px;
+      box-shadow: 0 0 16px rgba(34, 197, 94, .3);
+      transition: background .2s, transform .2s, box-shadow .2s;
+      white-space: nowrap;
+    }
+
+    .nav-wa:hover {
+      background: var(--wa-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(34, 197, 94, .45);
+    }
+
+    @media (min-width: 768px) {
+      .nav {
+        padding: 0 3rem;
+        height: 64px;
+      }
+
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    /* =========================================
+   HERO
+========================================= */
+    .hero {
+      min-height: 100svh;
+      background: var(--bg);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      padding: 5rem 1.25rem 3.5rem;
+    }
+
+    .hero-circuit {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero-mesh {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 15% 25%, rgba(79, 110, 247, .38) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 70% at 88% 65%, rgba(139, 92, 246, .22) 0%, transparent 58%),
+        radial-gradient(ellipse 40% 40% at 55% 15%, rgba(34, 211, 238, .12) 0%, transparent 55%),
+        var(--bg);
+      animation: meshShift 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes meshShift {
+      0% {
+        filter: hue-rotate(0deg) brightness(1);
+      }
+
+      100% {
+        filter: hue-rotate(12deg) brightness(1.1);
+      }
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse at 50% 50%, black 35%, transparent 78%);
+    }
+
+    .hero-tag {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--glass);
+      border: 1px solid var(--glass-b);
+      color: var(--text-muted);
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .42rem .95rem;
+      border-radius: 50px;
+      margin-bottom: 1.75rem;
+      width: fit-content;
+      animation: fadeUp .8s var(--ease-out) both;
+    }
+
+    .hero-tag-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--wa);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, .5);
+      }
+
+      50% {
+        box-shadow: 0 0 0 7px rgba(34, 197, 94, 0);
+      }
+    }
+
+    .hero-h1 {
+      position: relative;
+      z-index: 1;
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: clamp(2.4rem, 8.5vw, 5.5rem);
+      line-height: 1.06;
+      letter-spacing: -.045em;
+      color: var(--white);
+      margin-bottom: 1.6rem;
+      animation: fadeUp .9s .1s var(--ease-out) both;
+    }
+
+    .hero-h1 .hl-neon {
+      background: linear-gradient(90deg, var(--neon-mid), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-h1 .hl-outline {
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, .35);
+    }
+
+    .hero-sub {
+      position: relative;
+      z-index: 1;
+      color: var(--text-muted);
+      font-size: clamp(.94rem, 2.5vw, 1.1rem);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
+      animation: fadeUp .9s .2s var(--ease-out) both;
+    }
+
+    .hero-ctas {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .9rem;
+      animation: fadeUp .9s .3s var(--ease-out) both;
+    }
+
+    @media (min-width: 480px) {
+      .hero-ctas {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--wa);
+      color: var(--white);
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 1rem 1.85rem;
+      border-radius: var(--r-lg);
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, .4), 0 0 30px rgba(34, 197, 94, .2);
+      transition: transform .25s var(--ease-out), box-shadow .25s, background .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .18), transparent);
+      opacity: 0;
+      transition: opacity .25s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 44px rgba(34, 197, 94, .5);
+      background: var(--wa-dark);
+    }
+
+    .btn-primary:hover::after {
+      opacity: 1;
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: .9rem;
+      font-weight: 500;
+      padding: .9rem 1.2rem;
+      border-radius: var(--r-lg);
+      border: 1px solid var(--glass-b);
+      background: var(--glass);
+      transition: background .2s, color .2s, transform .2s, border-color .2s;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, .08);
+      color: var(--white);
+      border-color: rgba(255, 255, 255, .18);
+      transform: translateY(-2px);
+    }
+
+    .hero-strip {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+      animation: fadeUp .9s .45s var(--ease-out) both;
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--white);
+      letter-spacing: -.03em;
+    }
+
+    .hero-stat span {
+      font-size: .74rem;
+      color: var(--text-muted);
+      letter-spacing: .02em;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding: 7rem 3rem 4.5rem;
+        justify-content: center;
+        min-height: 100svh;
+      }
+
+      .hero-h1 {
+        max-width: 860px;
+      }
+    }
+
+    /* =========================================
+   SECTION HELPERS
+========================================= */
+    .section {
+      padding: 5rem 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .section {
+        padding: 7.5rem 3rem;
+      }
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--neon-mid);
+      margin-bottom: 1.1rem;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon), var(--cyan));
+      border-radius: 2px;
+    }
+
+    .section-title {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: clamp(1.8rem, 4.5vw, 2.9rem);
+      line-height: 1.1;
+      letter-spacing: -.038em;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-size: clamp(.9rem, 2vw, 1.05rem);
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    /* =========================================
+   SERVICIOS
+========================================= */
+    #servicios {
+      background: var(--bg-2);
+    }
+
+    .services-header {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .services-header {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+
+      .services-header .section-sub {
+        margin-left: auto;
+        text-align: right;
+      }
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 960px) {
+      .services-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-b);
+      border-radius: var(--r-lg);
+      padding: 2rem 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform .3s var(--ease-out), box-shadow .3s, border-color .3s;
+      cursor: default;
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(79, 110, 247, .06) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity .35s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(79, 110, 247, .15);
+      border-color: rgba(79, 110, 247, .3);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-card-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon), var(--cyan));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .4s var(--ease-out);
+    }
+
+    .service-card:hover .service-card-accent {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--r-sm);
+      background: rgba(79, 110, 247, .12);
+      border: 1px solid rgba(79, 110, 247, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      margin: 0 auto 1.25rem;
+      position: relative;
+      z-index: 1;
+      transition: transform .3s var(--ease-out), background .3s, box-shadow .3s;
+    }
+
+    .service-card:hover .service-icon {
+      transform: scale(1.1) rotate(-4deg);
+      background: rgba(79, 110, 247, .22);
+      box-shadow: 0 0 20px rgba(79, 110, 247, .3);
+    }
+
+    .service-card h3 {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: .6rem;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -.02em;
+      min-height: 3.2em;
+    }
+
+    .service-card p {
+      font-size: .87rem;
+      color: var(--text-muted);
+      line-height: 1.72;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .service-card-tag {
+      display: inline-block;
+      margin-top: 1.25rem;
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--neon-mid);
+      letter-spacing: .04em;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* =========================================
+   PROCESO
+========================================= */
+    #proceso {
+      background: var(--bg);
+    }
+
+    .steps-layout {
+      display: grid;
+      gap: 0;
+      margin-top: 3.5rem;
+    }
+
+    .step-item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 1.25rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--line);
+      align-items: start;
+    }
+
+    .step-item:last-child {
+      border-bottom: none;
+    }
+
+    .step-num-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon), var(--purple));
+      color: var(--white);
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 8px 28px var(--neon-glow);
+      position: relative;
+    }
+
+    .step-num::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(79, 110, 247, .35);
+      animation: rotateDash 8s linear infinite;
+    }
+
+    @keyframes rotateDash {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .step-line {
+      width: 1.5px;
+      flex: 1;
+      min-height: 40px;
+      background: linear-gradient(to bottom, var(--neon), transparent);
+      opacity: .2;
+    }
+
+
+    .step-body {
+      padding-top: .5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .step-body h3 {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -.025em;
+      color: var(--white);
+      margin-bottom: .45rem;
+      min-height: 2.6em;
+    }
+
+    .step-body p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      flex: 1;
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: .85rem;
+      background: rgba(79, 110, 247, .1);
+      border: 1px solid rgba(79, 110, 247, .2);
+      color: var(--neon-mid);
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .3rem .75rem;
+      border-radius: 50px;
+    }
+
+    @media (min-width: 768px) {
+      .steps-layout {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+      }
+
+      .step-item {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        padding: 2.5rem 2rem;
+        border-bottom: none;
+        border-right: 1px solid var(--line);
+      }
+
+      .step-item:last-child {
+        border-right: none;
+      }
+
+      .step-num-wrap {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .step-line {
+        width: 40px;
+        min-height: 1.5px;
+        background: linear-gradient(to right, var(--neon), transparent);
+      }
+
+      .step-body {
+        padding-top: 0;
+        align-self: stretch;
+      }
+    }
+
+    /* =========================================
+   CASOS DE ÉXITO
+========================================= */
+    #casos {
+      background: var(--bg-2);
+      overflow: hidden;
+    }
+
+    .case-card {
+      margin-top: 3rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-b);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 768px) {
+      .case-card {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .case-visual {
+      background: linear-gradient(140deg, #0d1a40 0%, #1a2d6b 50%, #0f3460 100%);
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .case-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(79, 110, 247, .25) 0%, transparent 60%);
+    }
+
+    .case-visual-deco {
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(79, 110, 247, .12) 0%, transparent 70%);
+      z-index: 0;
+    }
+
+    .case-visual-deco2 {
+      position: absolute;
+      bottom: -40px;
+      left: -40px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 1px solid rgba(79, 110, 247, .1);
+      z-index: 0;
+    }
+
+    .case-type {
+      display: inline-block;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .65);
+      background: rgba(79, 110, 247, .2);
+      border: 1px solid rgba(79, 110, 247, .3);
+      padding: .3rem .8rem;
+      border-radius: 50px;
+      margin-bottom: 1rem;
+      width: fit-content;
+      position: relative;
+      z-index: 1;
+    }
+
+    .case-visual h3 {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      color: var(--white);
+      letter-spacing: -.03em;
+      line-height: 1.2;
+      position: relative;
+      z-index: 1;
+    }
+
+    .case-visual-emoji {
+      position: absolute;
+      right: 2rem;
+      top: 2rem;
+      font-size: 5rem;
+      opacity: .1;
+      z-index: 0;
+    }
+
+    .case-client {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: .85rem;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--cyan);
+      position: relative;
+      z-index: 1;
+      letter-spacing: .03em;
+    }
+
+    .case-content {
+      padding: 2.5rem 2rem;
+    }
+
+    .case-content-block+.case-content-block {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .case-content-block h4 {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: .6rem;
+    }
+
+    .case-content-block p {
+      font-size: .9rem;
+      color: rgba(226, 232, 240, .72);
+      line-height: 1.78;
+    }
+
+    .case-metrics {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .metric-item strong {
+      display: block;
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: 1.8rem;
+      color: var(--white);
+      letter-spacing: -.04em;
+    }
+
+    .metric-item strong span {
+      color: var(--neon-mid);
+    }
+
+    .metric-item small {
+      font-size: .74rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: .15rem;
+    }
+
+    /* More cases teaser */
+    .more-cases {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .more-cases {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .mini-case {
+      background: var(--glass);
+      border: 1px solid var(--glass-b);
+      border-radius: var(--r-md);
+      padding: 1.4rem 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: border-color .25s, background .25s;
+    }
+
+    .mini-case:hover {
+      border-color: rgba(79, 110, 247, .3);
+      background: rgba(79, 110, 247, .06);
+    }
+
+    .mini-case-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .mini-case h4 {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--white);
+      margin-bottom: .3rem;
+      letter-spacing: -.015em;
+    }
+
+    .mini-case p {
+      font-size: .82rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* =========================================
+   NOSOTROS
+========================================= */
+    #nosotros {
+      background: var(--bg);
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    @media (min-width: 768px) {
+      .about-layout {
+        grid-template-columns: 1.2fr 1fr;
+        gap: 3.5rem;
+        align-items: start;
+      }
+    }
+
+    .about-main-text {
+      font-size: clamp(1rem, 2.2vw, 1.12rem);
+      color: rgba(226, 232, 240, .75);
+      line-height: 1.9;
+    }
+
+    .about-main-text p+p {
+      margin-top: 1.1rem;
+    }
+
+    .about-main-text strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .about-quote {
+      margin-top: 2rem;
+      padding: 1.5rem 1.75rem;
+      background: rgba(79, 110, 247, .07);
+      border-left: 3px solid var(--neon);
+      border-radius: 0 var(--r-md) var(--r-md) 0;
+      font-size: .95rem;
+      color: rgba(226, 232, 240, .78);
+      line-height: 1.72;
+      font-style: italic;
+    }
+
+    .about-quote cite {
+      display: block;
+      margin-top: .75rem;
+      font-size: .78rem;
+      font-weight: 600;
+      font-style: normal;
+      color: var(--neon-mid);
+      letter-spacing: .03em;
+    }
+
+    .about-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .about-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-b);
+      border-radius: var(--r-md);
+      padding: 1.35rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color .25s, box-shadow .25s, transform .25s;
+    }
+
+    .about-card:hover {
+      border-color: rgba(79, 110, 247, .3);
+      box-shadow: 0 8px 30px rgba(79, 110, 247, .1);
+      transform: translateX(4px);
+    }
+
+    .about-card-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: rgba(79, 110, 247, .1);
+      border: 1px solid rgba(79, 110, 247, .18);
+      border-radius: var(--r-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-card-body h4 {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: .92rem;
+      color: var(--white);
+      margin-bottom: .3rem;
+      letter-spacing: -.01em;
+    }
+
+    .about-card-body p {
+      font-size: .83rem;
+      color: var(--text-muted);
+      line-height: 1.68;
+    }
+
+    /* =========================================
+   CTA BAND (pre-footer)
+========================================= */
+    .cta-band {
+      background: linear-gradient(135deg, #0d1a40 0%, #0f1e50 50%, #0a1535 100%);
+      padding: 5rem 1.25rem;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .cta-band::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 50% 50%, rgba(79, 110, 247, .18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 20%, rgba(139, 92, 246, .1) 0%, transparent 60%);
+    }
+
+    .cta-band-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .cta-band-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .cta-band-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-band-label::before {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: var(--cyan);
+      border-radius: 2px;
+    }
+
+    .cta-band h2 {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: clamp(1.75rem, 4.5vw, 2.8rem);
+      line-height: 1.12;
+      letter-spacing: -.038em;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .cta-band p {
+      font-size: clamp(.9rem, 2vw, 1.05rem);
+      color: var(--text-muted);
+      line-height: 1.78;
+      margin-bottom: 2.25rem;
+    }
+
+    .btn-wa-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--wa);
+      color: var(--white);
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 1.2rem 2.25rem;
+      border-radius: var(--r-lg);
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, .4), 0 10px 50px rgba(34, 197, 94, .3);
+      transition: transform .3s var(--ease-out), box-shadow .3s, background .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-wa-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .2), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+
+    .btn-wa-cta:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(34, 197, 94, .5);
+      background: var(--wa-dark);
+    }
+
+    .btn-wa-cta:hover::before {
+      opacity: 1;
+    }
+
+    .cta-note {
+      margin-top: 1.1rem;
+      font-size: .78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    @media (min-width: 768px) {
+      .cta-band {
+        padding: 7rem 3rem;
+      }
+    }
+
+    /* =========================================
+   FLOATING WA BUTTON
+========================================= */
+    .wa-float {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 1000;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--wa);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(34, 197, 94, .5);
+      transition: transform .3s var(--ease-out), box-shadow .3s;
+      animation: floatPulse 2.2s ease-in-out infinite;
+    }
+
+    .wa-float:hover {
+      transform: scale(1.12) translateY(-2px);
+      box-shadow: 0 14px 52px rgba(34, 197, 94, .65);
+      animation: none;
+    }
+
+    @keyframes floatPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 8px 32px rgba(34, 197, 94, .5);
+      }
+
+      50% {
+        box-shadow: 0 8px 52px rgba(34, 197, 94, .75);
+      }
+    }
+
+    /* =========================================
+   FOOTER
+========================================= */
+    footer {
+      background: #040710;
+      padding: 2.5rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .75rem;
+      text-align: center;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (min-width: 768px) {
+      footer {
+        padding: 2.5rem 3rem;
+      }
+    }
+
+    .footer-logo {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--white);
+      letter-spacing: -.03em;
+    }
+
+    .footer-logo span {
+      color: var(--neon-mid);
+    }
+
+    footer p {
+      font-size: .77rem;
+      color: rgba(226, 232, 240, .28);
+    }
+
+    /* =========================================
+   SCROLL REVEAL
+========================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(5px);
+      transition: opacity .7s var(--ease-soft), transform .7s var(--ease-soft), filter .6s var(--ease-soft);
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    .reveal-delay-1 {
+      transition-delay: .1s;
+    }
+
+    .reveal-delay-2 {
+      transition-delay: .2s;
+    }
+
+    .reveal-delay-3 {
+      transition-delay: .3s;
+    }
+
+    .reveal-delay-4 {
+      transition-delay: .4s;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* WA icon */
+    .wa-icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* =========================================
+   EXTRA EFFECTS
+========================================= */
+
+    /* Service card spotlight (mouse-tracked radial glow) */
+    .service-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle 200px at var(--mx, -999px) var(--my, -999px),
+        rgba(109, 133, 255, .16),
+        transparent 70%
+      );
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .service-card:hover::after {
+      opacity: 1;
+    }
+
+    /* CTA band light sweep */
+    .cta-band::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 45%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(79, 110, 247, .055) 40%,
+        rgba(34, 211, 238, .04) 60%,
+        transparent 100%
+      );
+      animation: ctaSweep 8s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes ctaSweep {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(340%); }
+    }
+
+    /* Counter number flash on arrival */
+    @keyframes numPop {
+      0%   { transform: scale(.85); opacity: 0; }
+      60%  { transform: scale(1.08); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
+    .hero-stat strong.counting,
+    .metric-item strong.counting {
+      animation: numPop .45s var(--ease-out) both;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-dot"></div>
+      <span class="logo-tech">TechBrothers</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+      <li><a href="#casos">Casos</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+    </ul>
+    <a class="nav-wa"
+      href="https://wa.me/5491166920754?text=Hola%2C%20vi%20la%20web%20de%20Techbrothers%20y%20quiero%20saber%20m%C3%A1s"
+      target="_blank" rel="noopener noreferrer">
+      <svg class="wa-icon" style="width:15px;height:15px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+      </svg>
+      Hablar ahora
+    </a>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero-mesh"></div>
+    <div class="hero-grid"></div>
+    <canvas class="hero-circuit"></canvas>
+
+    <div class="wrap">
+      <div class="hero-tag">
+        <div class="hero-tag-pulse"></div>
+        Automatización de procesos para empresas que escalan
+      </div>
+
+      <h1 class="hero-h1">
+        Encontramos<br>
+        la mejor solución<br>
+        <span class="hl-neon">para tu negocio</span><br>
+
+      </h1>
+
+      <p class="hero-sub">
+        Mientras tu competencia sigue anotando en papeles y perdiendo tiempo,
+        Vos podes tener un sistema que se organiza solo y te facilita las tareas diarias.
+        Te damos la libertad de que tu empresa crezca sin que tú tengas que estar encima de cada detalle.
+      </p>
+
+      <div class="hero-ctas">
+        <a class="btn-primary"
+          href="https://wa.me/5491166920754?text=Hola%2C%20vi%20la%20web%20de%20Techbrothers%20y%20quiero%20saber%20m%C3%A1s"
+          target="_blank" rel="noopener noreferrer">
+          <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          </svg>
+          Agendar diagnóstico gratis
+        </a>
+        <a class="btn-ghost" href="#casos">Ver casos reales ↓</a>
+      </div>
+
+      <div class="hero-strip">
+        <div class="hero-stat">
+          <strong>−80%</strong>
+          <span>Tiempo en tareas manuales</span>
+        </div>
+        <div class="hero-stat">
+          <strong>24/7</strong>
+          <span>Operación automatizada</span>
+        </div>
+        <div class="hero-stat">
+          <strong>0</strong>
+          <span>Intermediarios</span>
+        </div>
+        <div class="hero-stat">
+          <strong>100%</strong>
+          <span>A medida, no enlatado</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICIOS ===================== -->
+  <section class="section" id="servicios">
+    <div class="wrap">
+      <div class="services-header">
+        <div>
+          <div class="eyebrow">Servicios</div>
+          <h2 class="section-title">Te resolvemos<br>problemas reales</h2>
+        </div>
+        <p class="section-sub">
+          No te vendemos herramientas, te devolvemos tiempo.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <div class="service-card-accent"></div>
+          <div class="service-icon">💬</div>
+          <h3>Chatbots & Asistentes IA</h3>
+          <p>Un asistente inteligente en WhatsApp que atiende clientes, da turnos y filtra interesados por ti, incluso
+            mientras duermes.</p>
+          <span class="service-card-tag">→ Activo 24/7 sin staff extra</span>
+        </div>
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-card-accent"></div>
+          <div class="service-icon">⚡</div>
+          <h3>Automatización de Procesos</h3>
+          <p>Encontramos las tareas que te hacen perder tiempo y las ponemos a trabajar solas. Desde cobrar facturas
+            hasta armar tus reportes: todo fluye sin que tengas que intervenir.</p>
+          <span class="service-card-tag">→ Menos errores, más velocidad</span>
+        </div>
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-card-accent"></div>
+          <div class="service-icon">🛠️</div>
+          <h3>Sistemas a Medida</h3>
+          <p>Deja de usar programas complicados que no te sirven. Te entregamos una herramienta a medida para que
+            manejes el stock, las ventas y tus ganancias desde la palma de tu mano.</p>
+          <span class="service-card-tag">→ Control total del negocio</span>
+        </div>
+        <div class="service-card reveal reveal-delay-3">
+          <div class="service-card-accent"></div>
+          <div class="service-icon">🔌</div>
+          <h3>Integraciones & APIs</h3>
+          <p>Conectamos tus herramientas existentes: CRM, WhatsApp, e-mail, facturación. Un ecosistema unificado que
+            elimina el trabajo duplicado y los datos aislados.</p>
+          <span class="service-card-tag">→ Todo conectado, cero fricciones</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROCESO ===================== -->
+  <section class="section" id="proceso">
+    <div class="wrap">
+      <div class="eyebrow">Transparencia total</div>
+      <h2 class="section-title">Cómo trabajamos</h2>
+
+
+      <div class="steps-layout">
+        <div class="step-item reveal">
+          <div class="step-num-wrap">
+            <div class="step-num">1</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3>Identificamos tu problema</h3>
+            <p>Analizamos en qué puntos tu equipo pierde tiempo y tu empresa pierde dinero. Una charla de 30 minutos nos
+              da el diagnóstico completo.</p>
+            <span class="step-badge">🎯 Diagnóstico al instante</span>
+          </div>
+        </div>
+        <div class="step-item reveal reveal-delay-1">
+          <div class="step-num-wrap">
+            <div class="step-num">2</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3>Construimos la solución</h3>
+            <p>Desarrollamos exactamente lo que tu negocio necesita. Sin plataformas genéricas, sin funciones que no
+              usás.</p>
+            <span class="step-badge">💳 Solución a medida</span>
+          </div>
+        </div>
+        <div class="step-item reveal reveal-delay-2">
+          <div class="step-num-wrap">
+            <div class="step-num">3</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3>Soporte constante</h3>
+            <p> Nos ocupamos de que tu tecnología nunca se detenga. Seguimos tu progreso de cerca y estamos disponibles
+              para resolver tus dudas y mantener todo bajo control.</p>
+            <span class="step-badge">📈 Seguimiento cercano</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CASOS ===================== -->
+  <section class="section" id="casos">
+    <div class="wrap">
+      <div class="eyebrow">Casos de éxito</div>
+      <h2 class="section-title">Lo que ya construimos</h2>
+
+      <div class="case-card reveal">
+        <div class="case-visual">
+          <div class="case-visual-deco"></div>
+          <div class="case-visual-deco2"></div>
+          <div class="case-visual-emoji">✂️</div>
+          <span class="case-type">Sistema de Gestión + Chatbot</span>
+          <h3>Sistema Inteligente<br>para Peluquería</h3>
+          <div class="case-client">→ ac_teamok</div>
+        </div>
+        <div class="case-content">
+          <div class="case-content-block">
+            <h4>El problema operativo</h4>
+            <p>El dueño perdía horas por semana en planillas de Excel mal completadas: turnos que se pisaban, stock sin
+              control y caja que no cerraba. Toda la gestión en papel y anotaciones que se perdían constantemente.</p>
+          </div>
+          <div class="case-content-block">
+            <h4>Lo que automatizamos</h4>
+            <p>Reemplazamos el caos por un sistema propio: agendamiento de turnos automático vía WhatsApp,
+              control de stock en tiempo real, cierre de caja digital y métricas del local accesibles desde el celular.
+            </p>
+          </div>
+          <div class="case-metrics">
+            <div class="metric-item">
+              <strong><span>−</span>80%</strong>
+              <small>Tiempo en administración</small>
+            </div>
+            <div class="metric-item">
+              <strong>0</strong>
+              <small>Errores de caja</small>
+            </div>
+            <div class="metric-item">
+              <strong>100%</strong>
+              <small>Turnos online 24/7</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </section>
+
+  <!-- ===================== NOSOTROS ===================== -->
+  <section class="section" id="nosotros">
+    <div class="wrap">
+      <div class="eyebrow">Nosotros</div>
+      <h2 class="section-title">Dos hermanos que<br>encuentran soluciones</h2>
+
+      <div class="about-layout">
+        <div class="reveal">
+          <div class="about-main-text">
+            <p>
+              Somos dos hermanos con obsesión por <strong>eliminar el trabajo manual que frena a las empresas</strong>.
+              Vimos de cerca cómo los negocios pierden rentabilidad no por falta de esfuerzo,
+              sino por procesos ineficientes que nadie se tomó el tiempo de automatizar.
+            </p>
+            <p>
+              No somos una consultora grande con layers de intermediarios.
+              Trabajás <strong>directamente con nosotros</strong> desde el diagnóstico hasta el lanzamiento.
+              Eso significa velocidad, claridad y resultados sin burocracia.
+            </p>
+          </div>
+        </div>
+
+        <div class="about-cards reveal reveal-delay-1">
+          <div class="about-card">
+            <div class="about-card-icon">⚡</div>
+            <div class="about-card-body">
+              <h4>Velocidad real</h4>
+              <p>Sin procesos internos que demoren. Del diagnóstico al primer entregable en días, no meses.</p>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">🎯</div>
+            <div class="about-card-body">
+              <h4>Enfocados en resolver</h4>
+              <p>Cada problema tiene su solucion, contanos el tuyo y te olvidate de él.</p>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">🤝</div>
+            <div class="about-card-body">
+              <h4>Trato directo.</h4>
+              <p>Hablas cara a cara con quien construye tu sistema. Seguimiento real y soporte siempre disponible de
+                persona a persona.</p>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">🔒</div>
+            <div class="about-card-body">
+              <h4>Precio justo</h4>
+              <p>Un proyecto, un presupuesto acorde.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA BAND ===================== -->
+  <section class="cta-band" id="contacto">
+    <div class="cta-band-grid"></div>
+    <div class="cta-band-inner reveal">
+      <div class="cta-band-label">¿Arrancamos?</div>
+      <h2>¿Tu operación te está frenando el crecimiento?</h2>
+      <p>
+        Una charla de 30 minutos y te mostramos exactamente qué automatizaríamos en tu negocio
+        y cuánto tiempo y plata te ahorraría desde el primer mes.
+      </p>
+      <a class="btn-wa-cta"
+        href="https://wa.me/5491166920754?text=Hola%2C%20vi%20la%20web%20de%20Techbrothers%20y%20quiero%20saber%20m%C3%A1s"
+        target="_blank" rel="noopener noreferrer">
+        <svg class="wa-icon" style="width:26px;height:26px" viewBox="0 0 24 24">
+          <path
+            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+        Agendar diagnóstico por WhatsApp
+      </a>
+      <p class="cta-note">⚡ Respondemos en menos de una hora </p>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="footer-logo">Tech<span>brothers</span></div>
+    <p>© 2025 Techbrothers · Automatización con IA para empresas que quieren escalar.</p>
+    <p style="margin-top:.25rem">Hecho por dos hermanos que sí responden el WhatsApp.</p>
+  </footer>
+
+  <!-- ===================== FLOATING WA ===================== -->
+  <a class="wa-float"
+    href="https://wa.me/5491166920754?text=Hola%2C%20vi%20la%20web%20de%20Techbrothers%20y%20quiero%20saber%20m%C3%A1s"
+    target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+    <svg style="width:28px;height:28px;fill:white" viewBox="0 0 24 24">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  </a>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <script>
+    /* ---------- Scroll Reveal ---------- */
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => io.observe(el));
+
+    /* ---------- Nav shadow on scroll ---------- */
+    const nav = document.querySelector('.nav');
+    window.addEventListener('scroll', () => {
+      nav.style.boxShadow = window.scrollY > 10
+        ? '0 4px 32px rgba(0,0,0,.35)'
+        : 'none';
+    }, { passive: true });
+
+    /* ---------- Smooth anchor offset (sticky nav) ---------- */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        const top = target.getBoundingClientRect().top + window.scrollY - 70;
+        window.scrollTo({ top, behavior: 'smooth' });
+      });
+    });
+
+    /* ---------- Hero: particle network ---------- */
+    (function () {
+      const hero = document.querySelector('.hero');
+      const canvas = hero.querySelector('.hero-circuit');
+      const ctx = canvas.getContext('2d');
+      let W, H;
+      const mouse = { x: -9999, y: -9999, active: false };
+      const COLORS = ['79,110,247', '139,92,246', '34,211,238'];
+      const CONNECT_DIST = 130;
+      const MOUSE_DIST = 160;
+      const N = 75;
+      const pts = [];
+
+      function Particle() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.vx = (Math.random() - 0.5) * 0.45;
+        this.vy = (Math.random() - 0.5) * 0.45;
+        this.r = 1.5 + Math.random() * 1.5;
+        this.col = COLORS[Math.floor(Math.random() * COLORS.length)];
+        this.a = 0.25 + Math.random() * 0.35;
+      }
+
+      function init() {
+        pts.length = 0;
+        for (let i = 0; i < N; i++) pts.push(new Particle());
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, W, H);
+
+        /* Update positions */
+        for (let i = 0; i < N; i++) {
+          const p = pts[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = W;
+          if (p.x > W) p.x = 0;
+          if (p.y < 0) p.y = H;
+          if (p.y > H) p.y = 0;
+
+          /* Mouse repulsion */
+          const mdx = p.x - mouse.x;
+          const mdy = p.y - mouse.y;
+          const md = Math.hypot(mdx, mdy);
+          if (md < MOUSE_DIST && md > 0) {
+            const f = ((MOUSE_DIST - md) / MOUSE_DIST) * 0.9;
+            p.x += (mdx / md) * f;
+            p.y += (mdy / md) * f;
+          }
+        }
+
+        /* Draw connections */
+        for (let i = 0; i < N; i++) {
+          for (let j = i + 1; j < N; j++) {
+            const dx = pts[i].x - pts[j].x;
+            const dy = pts[i].y - pts[j].y;
+            const d = Math.hypot(dx, dy);
+            if (d < CONNECT_DIST) {
+              const a = (1 - d / CONNECT_DIST) * 0.22;
+              ctx.beginPath();
+              ctx.moveTo(pts[i].x, pts[i].y);
+              ctx.lineTo(pts[j].x, pts[j].y);
+              ctx.strokeStyle = `rgba(79,110,247,${a})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+          /* Mouse connections */
+          const mdx = pts[i].x - mouse.x;
+          const mdy = pts[i].y - mouse.y;
+          const md = Math.hypot(mdx, mdy);
+          if (md < MOUSE_DIST) {
+            const a = (1 - md / MOUSE_DIST) * 0.55;
+            ctx.beginPath();
+            ctx.moveTo(pts[i].x, pts[i].y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(34,211,238,${a})`;
+            ctx.lineWidth = 0.9;
+            ctx.stroke();
+          }
+        }
+
+        /* Draw particles */
+        for (let i = 0; i < N; i++) {
+          const p = pts[i];
+          const mdx = p.x - mouse.x;
+          const mdy = p.y - mouse.y;
+          const md = Math.hypot(mdx, mdy);
+          const t = Math.max(0, 1 - md / MOUSE_DIST);
+          const r = p.r + t * 3.5;
+          const a = p.a + t * 0.55;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${p.col},${a})`;
+
+          if (t > 0.1) {
+            ctx.shadowColor = `rgba(${p.col},0.9)`;
+            ctx.shadowBlur = 6 + t * 18;
+          }
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        /* Cursor dot */
+        if (mouse.active) {
+          ctx.beginPath();
+          ctx.arc(mouse.x, mouse.y, 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(34,211,238,0.85)';
+          ctx.shadowColor = '#22d3ee';
+          ctx.shadowBlur = 16;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        requestAnimationFrame(render);
+      }
+
+      function resize() {
+        W = canvas.width = hero.offsetWidth;
+        H = canvas.height = hero.offsetHeight;
+        init();
+      }
+
+      hero.addEventListener('mousemove', e => {
+        const r = hero.getBoundingClientRect();
+        mouse.x = e.clientX - r.left;
+        mouse.y = e.clientY - r.top;
+        mouse.active = true;
+      });
+
+      hero.addEventListener('mouseleave', () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+        mouse.active = false;
+      });
+
+      window.addEventListener('resize', resize);
+      resize();
+      render();
+    })();
+
+    /* ---------- Active nav link on scroll ---------- */
+    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+    const sectionIds = [...navAnchors].map(a => a.getAttribute('href').slice(1));
+    const navSections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    const navActiveObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navAnchors.forEach(a => {
+            a.classList.toggle('nav-active', a.getAttribute('href') === '#' + e.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.25, rootMargin: '-60px 0px -50% 0px' });
+
+    navSections.forEach(s => navActiveObserver.observe(s));
+
+    /* ---------- Card spotlight ---------- */
+    document.querySelectorAll('.service-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--mx', '-999px');
+        card.style.setProperty('--my', '-999px');
+      });
+    });
+
+    /* ---------- Animated counters ---------- */
+    function countUp(el, end, duration, formatter) {
+      el.classList.add('counting');
+      const t0 = performance.now();
+      (function raf(now) {
+        const p = Math.min((now - t0) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.innerHTML = formatter(Math.round(end * eased));
+        if (p < 1) requestAnimationFrame(raf);
+      })(t0);
+    }
+
+    const heroStrip = document.querySelector('.hero-strip');
+    if (heroStrip) {
+      new IntersectionObserver(([e], obs) => {
+        if (!e.isIntersecting) return;
+        obs.disconnect();
+        document.querySelectorAll('.hero-stat strong').forEach(el => {
+          const raw = el.textContent.trim();
+          if (raw === '−80%') countUp(el, 80, 1100, n => `−${n}%`);
+          else if (raw === '100%') countUp(el, 100, 1300, n => `${n}%`);
+        });
+      }, { threshold: 0.6 }).observe(heroStrip);
+    }
+
+    const caseMetrics = document.querySelector('.case-metrics');
+    if (caseMetrics) {
+      new IntersectionObserver(([e], obs) => {
+        if (!e.isIntersecting) return;
+        obs.disconnect();
+        caseMetrics.querySelectorAll('.metric-item strong').forEach(el => {
+          const raw = el.textContent.replace(/\s/g, '');
+          if (raw.includes('80')) countUp(el, 80, 1100, n => `<span>−</span>${n}%`);
+          else if (raw === '100%') countUp(el, 100, 1300, n => `${n}%`);
+        });
+      }, { threshold: 0.6 }).observe(caseMetrics);
+    }
+  </script>
+</body>
+
+</html>
