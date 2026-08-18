@@ -17,13 +17,12 @@
   ------------------
     <nav class="nav">              Barra fija con logo, links y boton WhatsApp
     <section class="hero">         Primera pantalla: texto + panel animado
+    <section id="casos">           Lista expandible de casos (ver abajo)
     <section id="servicios">       4 tarjetas de servicio
     <section id="proceso">         Los 3 pasos de trabajo
-    <section id="casos">           Lista expandible de casos (ver abajo)
     <section id="nosotros">        Quienes somos + 4 tarjetas de valor
     <section class="cta-band">     Franja de cierre con el CTA principal
     <footer>
-    <a class="wa-float">           Burbuja fija de WhatsApp
     <script>                       Todo el JS, comentado bloque por bloque
 
   COMO AGREGAR UN CASO NUEVO
@@ -108,7 +107,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Techbrothers — Automatización con IA para empresas</title>
+  <title>Techbrothers — Sistemas a medida para negocios de CABA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -131,9 +130,9 @@
       <span class="logo-tech">TechBrothers</span>
     </a>
     <ul class="nav-links">
+      <li><a href="#casos">Casos</a></li>
       <li><a href="#servicios">Servicios</a></li>
       <li><a href="#proceso">Proceso</a></li>
-      <li><a href="#casos">Casos</a></li>
       <li><a href="#nosotros">Nosotros</a></li>
     </ul>
     <a class="nav-wa"
@@ -182,9 +181,9 @@
           </h1>
 
           <p class="hero-sub">
-            Sistemas de gestión a medida para llevar turnos, stock y caja sin planillas.
-            Y bots de WhatsApp que atienden cuando vos no podés. Armamos la pieza que a
-            tu negocio le falta — andando en semanas, no en meses.
+            Un programa propio para llevar turnos, stock y caja sin planillas. Y bots de
+            WhatsApp que contestan cuando vos no podés. Armamos la pieza que a tu negocio
+            le falta — andando en semanas, no en meses.
           </p>
 
           <div class="hero-ctas">
@@ -284,113 +283,6 @@
           Métricas de proyectos propios. Cada caso, con su cliente,
           <a href="#casos">más abajo</a>.
         </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================================================
-       SERVICIOS — 4 tarjetas
-       Los iconos son SVG en linea con class="ico": heredan el color del padre
-       via currentColor, asi que cambiar el color de la tarjeta alcanza.
-       NO usar emojis aca: fue una decision de diseno explicita.
-       ========================================================================= -->
-  <section class="section" id="servicios">
-    <div class="wrap">
-      <div class="services-header">
-        <div>
-          <div class="eyebrow">Servicios</div>
-          <h2 class="section-title">Te resolvemos<br>problemas reales</h2>
-        </div>
-        <p class="section-sub">
-          No te vendemos herramientas, te devolvemos tiempo.
-        </p>
-      </div>
-
-      <div class="services-grid">
-        <div class="service-card reveal">
-          <div class="service-card-accent"></div>
-          <div class="service-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3 8.7 8.7 0 0 1-3.9-.9L3 21l1.9-5.1a8.2 8.2 0 0 1-1-4A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg></div>
-          <h3>Chatbots & Asistentes IA</h3>
-          <p>Un asistente inteligente en WhatsApp que atiende clientes, da turnos y filtra interesados por ti, incluso
-            mientras duermes.</p>
-          <span class="service-card-tag">→ Activo 24/7 sin staff extra</span>
-        </div>
-        <div class="service-card reveal reveal-delay-1">
-          <div class="service-card-accent"></div>
-          <div class="service-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>
-          <h3>Automatización de Procesos</h3>
-          <p>Encontramos las tareas que te hacen perder tiempo y las ponemos a trabajar solas. Desde cobrar facturas
-            hasta armar tus reportes: todo fluye sin que tengas que intervenir.</p>
-          <span class="service-card-tag">→ Menos errores, más velocidad</span>
-        </div>
-        <div class="service-card reveal reveal-delay-2">
-          <div class="service-card-accent"></div>
-          <div class="service-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="m6.08 9.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/><path d="m6.08 14.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/></svg></div>
-          <h3>Sistemas a Medida</h3>
-          <p>Deja de usar programas complicados que no te sirven. Te entregamos una herramienta a medida para que
-            manejes el stock, las ventas y tus ganancias desde la palma de tu mano.</p>
-          <span class="service-card-tag">→ Control total del negocio</span>
-        </div>
-        <div class="service-card reveal reveal-delay-3">
-          <div class="service-card-accent"></div>
-          <div class="service-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg></div>
-          <h3>Integraciones & APIs</h3>
-          <p>Conectamos tus herramientas existentes: CRM, WhatsApp, e-mail, facturación. Un ecosistema unificado que
-            elimina el trabajo duplicado y los datos aislados.</p>
-          <span class="service-card-tag">→ Todo conectado, cero fricciones</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================================================
-       PROCESO — los 3 pasos
-       En desktop van en 3 columnas separadas por lineas verticales; en celular
-       se apilan. La linea que une los pasos es .step-line.
-       ========================================================================= -->
-  <section class="section" id="proceso">
-    <div class="wrap">
-      <div class="eyebrow">Transparencia total</div>
-      <h2 class="section-title">Cómo trabajamos</h2>
-
-
-      <div class="steps-layout">
-        <div class="step-item reveal">
-          <div class="step-num-wrap">
-            <div class="step-num">1</div>
-            <div class="step-line"></div>
-          </div>
-          <div class="step-body">
-            <h3>Identificamos tu problema</h3>
-            <p>Analizamos en qué puntos tu equipo pierde tiempo y tu empresa pierde dinero. Una charla de 30 minutos nos
-              da el diagnóstico completo.</p>
-            <span class="step-badge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Diagnóstico al instante</span>
-          </div>
-        </div>
-        <div class="step-item reveal reveal-delay-1">
-          <div class="step-num-wrap">
-            <div class="step-num">2</div>
-            <div class="step-line"></div>
-          </div>
-          <div class="step-body">
-            <h3>Construimos la solución</h3>
-            <p>Desarrollamos exactamente lo que tu negocio necesita. Sin plataformas genéricas, sin funciones que no
-              usás.</p>
-            <span class="step-badge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Solución a medida</span>
-          </div>
-        </div>
-        <div class="step-item reveal reveal-delay-2">
-          <div class="step-num-wrap">
-            <div class="step-num">3</div>
-            <div class="step-line"></div>
-          </div>
-          <div class="step-body">
-            <h3>Soporte constante</h3>
-            <p> Nos ocupamos de que tu tecnología nunca se detenga. Seguimos tu progreso de cerca y estamos disponibles
-              para resolver tus dudas y mantener todo bajo control.</p>
-            <span class="step-badge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>Seguimiento cercano</span>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -496,73 +388,6 @@
             </div>
           </div>
         </div>
-        <h3 class="cases-group">Chatbots de WhatsApp</h3>
-
-        <div class="case-row" id="caso-perfumeria">
-          <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-perfumeria-panel">
-            <span class="case-client">Perfumería</span>
-            <span class="case-tag">Chatbot</span>
-            <span class="case-year">2025</span>
-            <span class="case-resumen">Consultas de stock y reservas, automáticas</span>
-            <span class="case-plus" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-            </span>
-          </button>
-          <div class="case-panel" id="caso-perfumeria-panel" role="region">
-            <div class="case-panel-inner">
-              <div class="case-text">
-                <div class="case-block">
-                  <h4>El problema</h4>
-                  <p>Las consultas por WhatsApp llegaban todo el día — precio, stock, horarios — y se contestaban a mano entre cliente y cliente. Muchas quedaban sin respuesta hasta el otro día.</p>
-                </div>
-                <div class="case-block">
-                  <h4>Lo que hicimos</h4>
-                  <p>Un bot sobre la API de WhatsApp Business que consulta el stock real, responde precio y disponibilidad, y deja el producto reservado.</p>
-                </div>
-                <div class="case-block">
-                  <h4>El resultado</h4>
-                  <p>Las consultas repetidas se responden solas al instante, a cualquier hora. El mostrador solo atiende lo que el bot no puede resolver.</p>
-                </div>
-                
-                <div class="case-foot">
-                  <span class="case-stack">n8n · Supabase · WhatsApp Business API</span>
-                </div>
-                
-              </div>
-              
-          <figure class="case-media case-media--phone">
-            <div class="phone" aria-hidden="true">
-            <div class="phone-notch"></div>
-            <div class="phone-screen">
-
-              <div class="chat-head">
-                <div class="chat-avatar">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M9 3h6v3H9zM8 6h8l1 4a5 5 0 0 1-1 8H8a5 5 0 0 1-1-8z" />
-                    <path d="M10 13h4" />
-                  </svg>
-                </div>
-                <div class="chat-head-txt">
-                  <strong>Perfumería · Consultas</strong>
-                  <span>en línea</span>
-                </div>
-              </div>
-
-              <div class="chat-body" id="chatBody">
-                <div class="chat-day">HOY</div>
-              </div>
-
-              <div class="chat-bar">
-                <span>Escribí un mensaje</span>
-              </div>
-
-            </div>
-          </div>
-            <figcaption>Conversación real del bot, reconstruida</figcaption>
-          </figure>
-            </div>
-          </div>
-        </div>
         <h3 class="cases-group">Sitios institucionales</h3>
 
         <div class="case-row" id="caso-gts">
@@ -650,12 +475,200 @@
             </div>
           </div>
         </div>
+        <h3 class="cases-group">Chatbots y automatizaciones</h3>
+
+        <div class="case-row" id="caso-perfumeria">
+          <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-perfumeria-panel">
+            <span class="case-client">Perfumería</span>
+            <span class="case-tag">Chatbot</span>
+            <span class="case-year">2025</span>
+            <span class="case-resumen">Consultas de stock y reservas, automáticas</span>
+            <span class="case-plus" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="case-panel" id="caso-perfumeria-panel" role="region">
+            <div class="case-panel-inner">
+              <div class="case-text">
+                <div class="case-block">
+                  <h4>El problema</h4>
+                  <p>Las consultas por WhatsApp llegaban todo el día — precio, stock, horarios — y se contestaban a mano entre cliente y cliente. Muchas quedaban sin respuesta hasta el otro día.</p>
+                </div>
+                <div class="case-block">
+                  <h4>Lo que hicimos</h4>
+                  <p>Un bot sobre la API de WhatsApp Business que consulta el stock real, responde precio y disponibilidad, y deja el producto reservado.</p>
+                </div>
+                <div class="case-block">
+                  <h4>El resultado</h4>
+                  <p>Las consultas repetidas se responden solas al instante, a cualquier hora. El mostrador solo atiende lo que el bot no puede resolver.</p>
+                </div>
+                
+                <div class="case-foot">
+                  <span class="case-stack">n8n · Supabase · WhatsApp Business API</span>
+                </div>
+                
+              </div>
+              
+          <figure class="case-media case-media--phone">
+            <div class="phone" aria-hidden="true">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+
+              <div class="chat-head">
+                <div class="chat-avatar">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M9 3h6v3H9zM8 6h8l1 4a5 5 0 0 1-1 8H8a5 5 0 0 1-1-8z" />
+                    <path d="M10 13h4" />
+                  </svg>
+                </div>
+                <div class="chat-head-txt">
+                  <strong>Perfumería · Consultas</strong>
+                  <span>en línea</span>
+                </div>
+              </div>
+
+              <div class="chat-body" id="chatBody">
+                <div class="chat-day">HOY</div>
+              </div>
+
+              <div class="chat-bar">
+                <span>Escribí un mensaje</span>
+              </div>
+
+            </div>
+          </div>
+            <figcaption>Conversación real del bot, reconstruida</figcaption>
+          </figure>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- =========================================================================
-       NOSOTROS — texto + 4 tarjetas de valor
+       SERVICIOS — 4 tarjetas
+       Los iconos son SVG en linea con class="ico": heredan el color del padre
+       via currentColor, asi que cambiar el color de la tarjeta alcanza.
+       NO usar emojis aca: fue una decision de diseno explicita.
+       ========================================================================= -->
+  <section class="section" id="servicios">
+    <div class="wrap">
+      <div class="services-header">
+        <div>
+          <div class="eyebrow">Servicios</div>
+          <h2 class="section-title">Tres cosas<br>que hacemos</h2>
+        </div>
+        <p class="section-sub">
+          Las tres con casos entregados. Si te hace falta algo que no está acá, preguntanos igual.
+        </p>
+      </div>
+
+      <div class="services-grid services-grid--3">
+
+        <a class="service-card reveal" href="#casos">
+          <div class="service-card-accent"></div>
+          <div class="service-icon">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+              <path d="m6.08 9.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/>
+              <path d="m6.08 14.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/>
+            </svg>
+          </div>
+          <h3>Sistemas de gestión a medida</h3>
+          <p>El programa que tu negocio usa todos los días, hecho para cómo trabajás vos.
+            Turnos, stock, caja, clientes: lo que haga falta, y nada que no uses.</p>
+          <span class="service-card-tag">Ver los 2 casos →</span>
+        </a>
+
+        <a class="service-card reveal reveal-delay-1" href="#caso-gts">
+          <div class="service-card-accent"></div>
+          <div class="service-icon">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2.5" y="4" width="19" height="15" rx="2"/>
+              <path d="M2.5 8.5h19M6 6.2h.01M8.5 6.2h.01"/>
+            </svg>
+          </div>
+          <h3>Sitios institucionales</h3>
+          <p>La cara pública de tu empresa, para dejar de mandar PDFs sueltos.
+            Catálogo, fichas de producto, formulario que llega a tu mail y todo andando en el celular.</p>
+          <span class="service-card-tag">Ver los 2 casos →</span>
+        </a>
+
+        <a class="service-card reveal reveal-delay-2" href="#caso-perfumeria">
+          <div class="service-card-accent"></div>
+          <div class="service-icon">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3 8.7 8.7 0 0 1-3.9-.9L3 21l1.9-5.1a8.2 8.2 0 0 1-1-4A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/>
+            </svg>
+          </div>
+          <h3>Chatbots y automatizaciones</h3>
+          <p>Un bot en tu WhatsApp que contesta las preguntas de siempre — precio, stock, horarios —
+            y te avisa solo cuando hay que atender de verdad.</p>
+          <span class="service-card-tag">Ver el caso →</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       PROCESO — los 3 pasos
+       En desktop van en 3 columnas separadas por lineas verticales; en celular
+       se apilan. La linea que une los pasos es .step-line.
+       ========================================================================= -->
+  <section class="section" id="proceso">
+    <div class="wrap">
+      <div class="eyebrow">Cómo trabajamos</div>
+      <h2 class="section-title">Tres pasos,<br>sin vueltas</h2>
+
+
+      <div class="steps-layout">
+        <div class="step-item reveal">
+          <div class="step-num-wrap">
+            <div class="step-num">1</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3>Te escuchamos</h3>
+            <p>Media hora de charla para entender en qué se te va el día y qué parte de eso puede
+              hacer solo un sistema.</p>
+            <span class="step-badge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Sin costo</span>
+          </div>
+        </div>
+        <div class="step-item reveal reveal-delay-1">
+          <div class="step-num-wrap">
+            <div class="step-num">2</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3>Lo construimos</h3>
+            <p>Armamos exactamente lo que hace falta para tu negocio. Nada de funciones de relleno
+              que después nadie abre.</p>
+            <span class="step-badge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Hecho para tu negocio</span>
+          </div>
+        </div>
+        <div class="step-item reveal reveal-delay-2">
+          <div class="step-num-wrap">
+            <div class="step-num">3</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3>Nos quedamos</h3>
+            <p>Si algo falla o querés sumar algo nuevo, nos escribís a nosotros. No hay mesa de
+              ayuda ni número de ticket.</p>
+            <span class="step-badge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>Nos escribís directo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       NOSOTROS — texto + 4 respuestas a objeciones
+       Las tarjetas responden las preguntas que un dueno de local se hace antes
+       de escribir. Reemplazaron a cuatro promesas genericas ("Velocidad real",
+       "Precio justo") que no probaban nada.
        ========================================================================= -->
   <section class="section" id="nosotros">
     <div class="wrap">
@@ -666,49 +679,76 @@
         <div class="reveal">
           <div class="about-main-text">
             <p>
-              Somos dos hermanos con obsesión por <strong>eliminar el trabajo manual que frena a las empresas</strong>.
-              Vimos de cerca cómo los negocios pierden rentabilidad no por falta de esfuerzo,
-              sino por procesos ineficientes que nadie se tomó el tiempo de automatizar.
+              Somos dos hermanos, y nos metimos en esto por una razón simple:
+              <strong>vimos demasiados negocios buenos perdiendo plata en tareas que una computadora
+              podría hacer sola</strong>. No por falta de laburo — al revés, por laburar de más en lo
+              que no hace falta.
             </p>
             <p>
-              No somos una consultora grande con layers de intermediarios.
-              Trabajás <strong>directamente con nosotros</strong> desde el diagnóstico hasta el lanzamiento.
-              Eso significa velocidad, claridad y resultados sin burocracia.
+              No somos una agencia. Somos las dos personas que te van a atender, escribir el código
+              y contestarte el WhatsApp dentro de un año. <strong>No hay nadie más en el medio.</strong>
             </p>
           </div>
         </div>
 
         <div class="about-cards reveal reveal-delay-1">
+
           <div class="about-card">
-            <div class="about-card-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>
+            <div class="about-card-icon">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                <circle cx="12" cy="12" r="2.6"/>
+                <path d="M6 12h.01M18 12h.01"/>
+              </svg>
+            </div>
             <div class="about-card-body">
-              <h4>Velocidad real</h4>
-              <p>Sin procesos internos que demoren. Del diagnóstico al primer entregable en días, no meses.</p>
+              <h4>¿Cuánto sale?</h4>
+              <p>No tenemos lista de precios porque no hay dos negocios iguales. Charlamos, vemos qué
+                necesitás y te pasamos un presupuesto cerrado antes de empezar.</p>
             </div>
           </div>
+
           <div class="about-card">
-            <div class="about-card-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+            <div class="about-card-icon">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
             <div class="about-card-body">
-              <h4>Enfocados en resolver</h4>
-              <p>Cada problema tiene su solucion, contanos el tuyo y te olvidate de él.</p>
+              <h4>¿Con quién hablo?</h4>
+              <p>Con nosotros dos, siempre. Los mismos que escriben el sistema son los que te
+                contestan cuando algo no anda.</p>
             </div>
           </div>
+
           <div class="about-card">
-            <div class="about-card-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="about-card-icon">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+              </svg>
+            </div>
             <div class="about-card-body">
-              <h4>Trato directo.</h4>
-              <p>Hablas cara a cara con quien construye tu sistema. Seguimiento real y soporte siempre disponible de
-                persona a persona.</p>
+              <h4>¿Puedo empezar por algo chico?</h4>
+              <p>Sí, y suele ser lo mejor. Arrancamos por lo que más te está molestando hoy, y si
+                funciona seguimos sumando.</p>
             </div>
           </div>
+
           <div class="about-card">
-            <div class="about-card-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div>
+            <div class="about-card-icon">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
             <div class="about-card-body">
-              <h4>Precio justo</h4>
-              <p>Un proyecto, un presupuesto acorde.</p>
+              <h4>¿Y mis datos?</h4>
+              <p>COMPLETAR: dónde quedan alojados los datos del cliente, si hay backups y cada
+                cuánto. Es la objeción más común y hoy la página no la responde.</p>
             </div>
           </div>
-        </div>
+
       </div>
     </div>
   </section>
@@ -722,10 +762,10 @@
     <div class="cta-band-grid"></div>
     <div class="cta-band-inner reveal">
       <div class="cta-band-label">¿Arrancamos?</div>
-      <h2>¿Tu operación te está frenando el crecimiento?</h2>
+      <h2>¿Cuánto tiempo por semana se te va en administrar?</h2>
       <p>
-        Una charla de 30 minutos y te mostramos exactamente qué automatizaríamos en tu negocio
-        y cuánto tiempo y plata te ahorraría desde el primer mes.
+        Contanos cómo llevás hoy los turnos, la caja o los pedidos, y te decimos qué se puede
+        resolver con un sistema y qué no. Sin costo y sin compromiso.
       </p>
       <a class="btn-wa-cta"
         href="https://wa.me/5491166920754?text=Hola%2C%20vi%20la%20web%20de%20Techbrothers%20y%20quiero%20saber%20m%C3%A1s"
@@ -736,32 +776,22 @@
         </svg>
         Agendar diagnóstico por WhatsApp
       </a>
-      <p class="cta-note"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Respondemos al instante</p>
+      <p class="cta-note"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Te contestamos nosotros dos, no un bot</p>
     </div>
   </section>
 
   <!-- ===================== FOOTER ===================== -->
   <footer>
     <div class="footer-logo">Tech<span>brothers</span></div>
-    <p>© 2025 Techbrothers · Automatización con IA para empresas que quieren escalar.</p>
+    <p>© 2026 Techbrothers · Sistemas de gestión, sitios y chatbots para negocios de CABA.</p>
     <p style="margin-top:.25rem">Hecho por dos hermanos que sí responden el WhatsApp.</p>
   </footer>
 
-  <!-- =========================================================================
-       BURBUJA FLOTANTE DE WHATSAPP
-       Es el unico elemento verde permanente del sitio. El verde se reserva
-       para el canal WhatsApp; como color decorativo no se usa en ningun lado.
-       ========================================================================= -->
-  <a class="wa-float"
-    href="https://wa.me/5491166920754?text=Hola%2C%20vi%20la%20web%20de%20Techbrothers%20y%20quiero%20saber%20m%C3%A1s"
-    target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
-    <svg style="width:28px;height:28px;fill:white" viewBox="0 0 24 24">
-      <path
-        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-    </svg>
-  </a>
+  <!-- La burbuja verde flotante de WhatsApp se quito a proposito: el boton
+       "Hablar ahora" de la barra ya es sticky y cumple la misma funcion sin
+       tapar contenido. Los estilos siguen en styles.css (seccion BURBUJA
+       FLOTANTE) por si se quiere volver atras. -->
 
-  <!-- ===================== SCRIPTS ===================== -->
   <script>
     /* =========================================================================
        JAVASCRIPT DEL SITIO

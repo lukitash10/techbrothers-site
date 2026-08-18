@@ -67,7 +67,7 @@
      DEMO DEL BOT ................. el telefono con la conversacion
      NOSOTROS ..................... texto + tarjetas de valor
      CTA BAND ..................... franja previa al footer
-     FLOATING WA BUTTON ........... burbuja fija de WhatsApp
+     BURBUJA FLOTANTE WA .......... sin uso, se puede reactivar
      FOOTER
      SCROLL REVEAL ................ entrada de elementos al hacer scroll
      ENTRADA DEL H1 ............... revelado por linea con mascara
@@ -954,8 +954,11 @@ body::before {
 /* =========================================
    SERVICIOS
 ========================================= */
+/* Orden de secciones: hero -> casos -> servicios -> proceso -> nosotros.
+   Los fondos alternan bg / bg-2 para separarlas visualmente. Si mueves una
+   seccion de lugar, hay que reasignar estos fondos o el ritmo se rompe. */
 #servicios {
-  background: var(--bg-2);
+  background: var(--bg);
 }
 
 .services-header {
@@ -994,6 +997,33 @@ body::before {
   .services-grid {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  /* Variante de 3 columnas: hoy son 3 servicios, uno por grupo de casos */
+  .services-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Las tarjetas pasaron de <div> a <a>: cada una lleva a sus casos */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+
+.service-card:focus-visible {
+  outline: 2px solid var(--neon-mid);
+  outline-offset: 3px;
+}
+
+.service-card .service-card-tag {
+  margin-top: auto;
+  transition: color .2s;
+}
+
+.service-card:hover .service-card-tag {
+  color: var(--white);
 }
 
 .service-card {
@@ -1125,7 +1155,7 @@ body::before {
    PROCESO
 ========================================= */
 #proceso {
-  background: var(--bg);
+  background: var(--bg-2);
 }
 
 .steps-layout {
@@ -1301,6 +1331,16 @@ body::before {
     grid-template-columns: 1.2fr 1fr;
     gap: 3.5rem;
     align-items: start;
+  }
+
+  /* Las dos columnas arrancan en el mismo borde, pero opticamente no:
+     la tarjeta tiene 1.35rem de padding antes del titulo, mientras que el
+     texto solo carga el medio-interlineado (~6px). Eso dejaba el primer
+     titulo 16px mas abajo que la primera linea de texto. Subimos la columna
+     de tarjetas para que ambas ARRANQUEN a la misma altura visual.
+     Solo en desktop: en celular se apilan y no hay nada que alinear. */
+  .about-cards {
+    margin-top: -16px;
   }
 }
 
@@ -2065,7 +2105,18 @@ body::before {
 }
 
 /* =========================================
-   FLOATING WA BUTTON
+   BURBUJA FLOTANTE DE WHATSAPP  —  SIN USO
+   Se quito del HTML: el boton "Hablar ahora"
+   de la barra ya es sticky y cumple lo mismo
+   sin tapar contenido.
+   Para volver a activarla, pegar esto en el
+   HTML justo antes del <script>:
+
+     <a class="wa-float" href="https://wa.me/NUMERO"
+        target="_blank" rel="noopener noreferrer"
+        aria-label="Contactar por WhatsApp">
+       ... el <svg> del icono de WhatsApp ...
+     </a>
 ========================================= */
 .wa-float {
   position: fixed;
