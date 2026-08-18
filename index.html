@@ -1,4 +1,108 @@
 <!DOCTYPE html>
+<!--
+=============================================================================
+  TECHBROTHERS — index.html
+=============================================================================
+
+  Landing de una sola pagina. Sin framework, sin build: se abre el archivo y
+  anda. El unico recurso externo son las tipografias de Google Fonts.
+
+  ARCHIVOS DEL PROYECTO
+  ---------------------
+    index.html   Este archivo: estructura + JavaScript (al final del <body>)
+    styles.css   Todos los estilos. Empieza con su propio indice y con la guia
+                 de tokens de color y tipografia. LEELO ANTES DE TOCAR ESTILOS.
+
+  MAPA DEL DOCUMENTO
+  ------------------
+    <nav class="nav">              Barra fija con logo, links y boton WhatsApp
+    <section class="hero">         Primera pantalla: texto + panel animado
+    <section id="servicios">       4 tarjetas de servicio
+    <section id="proceso">         Los 3 pasos de trabajo
+    <section id="casos">           Lista expandible de casos (ver abajo)
+    <section id="nosotros">        Quienes somos + 4 tarjetas de valor
+    <section class="cta-band">     Franja de cierre con el CTA principal
+    <footer>
+    <a class="wa-float">           Burbuja fija de WhatsApp
+    <script>                       Todo el JS, comentado bloque por bloque
+
+  COMO AGREGAR UN CASO NUEVO
+  --------------------------
+    Los casos viven en <div class="cases">, agrupados por tipo con
+    <h3 class="cases-group">. Cada caso es un <div class="case-row"> con esta
+    estructura, y hay que respetarla porque el JS y la accesibilidad dependen
+    de ella:
+
+      <div class="case-row" id="caso-NOMBRE">              <- id unico
+        <button class="case-head" aria-expanded="false"
+                aria-controls="caso-NOMBRE-panel">          <- mismo id + "-panel"
+          <span class="case-client">    Cliente
+          <span class="case-tag">       Sistema | Chatbot | Sitio
+          <span class="case-year">      Ano
+          <span class="case-resumen">   Una linea, se ve con la fila cerrada
+          <span class="case-plus">      El icono +, gira 135 grados al abrir
+        </button>
+        <div class="case-panel" id="caso-NOMBRE-panel" role="region">
+          <div class="case-panel-inner">
+            <div class="case-text">     Problema / Lo que hicimos / El resultado
+            <figure class="case-media"> Video o captura
+          </div>
+        </div>
+      </div>
+
+    OJO con estas tres cosas:
+      1. aria-controls del boton TIENE que coincidir con el id del panel.
+         Si no coinciden, la fila no abre (el JS busca por ese id).
+      2. El id del row debe empezar con "caso-". El smooth scroll global
+         ignora a proposito los links que empiezan asi, para que el hash
+         cambie de verdad y el acordeon lo escuche.
+      3. Solo una fila abierta por vez. Es intencional, no lo saques.
+
+  COMO CARGAR EL VIDEO O LA CAPTURA DE UN CASO
+  --------------------------------------------
+    Hoy cada caso sin material tiene un placeholder:
+
+      <figure class="case-media" data-media-pending>
+        <div class="case-media-slot"><span>Video del sistema andando</span></div>
+      </figure>
+
+    Para cargarlo, reemplaza TODO el <figure> por:
+
+      <figure class="case-media">
+        <video data-src="assets/peluqueria.mp4" poster="assets/peluqueria.jpg"
+               muted loop playsinline preload="none"></video>
+      </figure>
+
+    Usa data-src y NO src. El JS del acordeon pasa data-src a src recien
+    cuando se abre la fila: asi el video no se descarga al entrar a la pagina.
+    Para una imagen es igual: <img data-src="..." alt="...">.
+
+  QUEDA PENDIENTE DE COMPLETAR
+  ----------------------------
+    Buscar "COMPLETAR" y "PENDIENTE:" en este archivo. Los bloques marcados
+    con <p class="case-pending"> se ven en amarillo en la pagina a proposito,
+    para que no se publiquen sin querer. Borra el <p> cuando cargues el dato.
+
+  DEPENDENCIAS DEL JAVASCRIPT
+  ---------------------------
+    El JS del final busca estos ids y clases. Si los renombras en el HTML,
+    hay que renombrarlos tambien alla:
+      #agendaList #tileCaja #tileTurnos ... panel animado del hero
+      #chatBody .................... conversacion del bot (caso perfumeria)
+      .case-row .case-head ......... acordeon de casos
+      .hero-strip .hero-stat ....... contadores que animan al aparecer
+      .reveal ...................... elementos que entran al hacer scroll
+      .hero-circuit ................ canvas de particulas del fondo
+
+  ACCESIBILIDAD
+  -------------
+    - Las animaciones se apagan solas si el sistema pide movimiento reducido
+      (@media prefers-reduced-motion en styles.css + chequeos en el JS).
+    - El acordeon usa <button> real con aria-expanded: anda con teclado.
+    - Los mockups decorativos (.panel, .phone) van con aria-hidden="true"
+      para que el lector de pantalla no lea texto de adorno.
+=============================================================================
+-->
 <html lang="es">
 
 <head>
@@ -8,1513 +112,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet" />
 
-  <style>
-    /* =========================================
-   TOKENS
-========================================= */
-    :root {
-      --bg: #070b12;
-      --bg-2: #0c1220;
-      --bg-card: rgba(255, 255, 255, .035);
-      --neon: #4f6ef7;
-      --neon-mid: #6d85ff;
-      --neon-glow: rgba(79, 110, 247, .35);
-      --purple: #8b5cf6;
-      --cyan: #22d3ee;
-      --wa: #22c55e;
-      --wa-dark: #16a34a;
-      --glass: rgba(255, 255, 255, .05);
-      --glass-b: rgba(255, 255, 255, .09);
-      --text: #e2e8f0;
-      --text-muted: rgba(226, 232, 240, .48);
-      --line: rgba(255, 255, 255, .08);
-      --white: #ffffff;
-
-      --f-display: 'Bricolage Grotesque', sans-serif;
-      --f-body: 'Instrument Sans', sans-serif;
-
-      --ease-out: cubic-bezier(.22, .68, 0, 1.2);
-      --ease-soft: cubic-bezier(.4, 0, .2, 1);
-
-      --r-sm: 10px;
-      --r-md: 16px;
-      --r-lg: 24px;
-      --r-xl: 36px;
-    }
-
-    /* =========================================
-   RESET + BASE
-========================================= */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      -webkit-text-size-adjust: 100%;
-    }
-
-    body {
-      font-family: var(--f-body);
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    img {
-      display: block;
-      max-width: 100%;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* =========================================
-   NOISE TEXTURE
-========================================= */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      opacity: .022;
-    }
-
-    /* =========================================
-   NAV
-========================================= */
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1.25rem;
-      height: 60px;
-      background: rgba(7, 11, 18, .88);
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
-    }
-
-    .nav::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg,
-          transparent 0%,
-          rgba(79, 110, 247, .15) 15%,
-          var(--neon) 40%,
-          var(--cyan) 60%,
-          rgba(79, 110, 247, .15) 85%,
-          transparent 100%);
-      background-size: 200% 100%;
-      animation: navShimmer 6s linear infinite;
-    }
-
-    @keyframes navShimmer {
-      0% {
-        background-position: 200% 0;
-      }
-
-      100% {
-        background-position: -200% 0;
-      }
-    }
-
-    .nav-logo {
-      font-family: var(--f-display);
-      font-weight: 800;
-      font-size: 1.15rem;
-      letter-spacing: -.03em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: opacity .2s;
-    }
-
-    .nav-logo:hover {
-      opacity: .8;
-    }
-
-    .logo-tech {
-      background: linear-gradient(90deg, var(--white) 0%, var(--neon-mid) 30%, var(--white) 60%, var(--neon-mid) 100%);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: logo-shine 3s linear infinite;
-    }
-
-    @keyframes logo-shine {
-      from {
-        background-position: 0% center;
-      }
-
-      to {
-        background-position: 200% center;
-      }
-    }
-
-    .logo-brothers {
-      color: var(--text-muted);
-    }
-
-    .nav-logo-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--neon);
-      box-shadow: 0 0 8px var(--neon);
-      display: inline-block;
-      animation: blink 2.4s ease-in-out infinite;
-    }
-
-    @keyframes blink {
-
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: .3;
-        transform: scale(.65);
-      }
-    }
-
-    .nav-links {
-      display: none;
-      list-style: none;
-      gap: 2rem;
-    }
-
-    .nav-links a {
-      font-size: .82rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      transition: color .2s;
-      letter-spacing: .01em;
-      position: relative;
-      padding-bottom: 2px;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      right: 0;
-      height: 1.5px;
-      background: linear-gradient(90deg, var(--neon), var(--cyan));
-      border-radius: 2px;
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .3s var(--ease-out);
-    }
-
-    .nav-links a:hover,
-    .nav-links a.nav-active {
-      color: var(--white);
-    }
-
-    .nav-links a:hover::after,
-    .nav-links a.nav-active::after {
-      transform: scaleX(1);
-    }
-
-    .nav-wa {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background: var(--wa);
-      color: var(--white);
-      font-weight: 600;
-      font-size: .8rem;
-      padding: .5rem 1.1rem;
-      border-radius: 50px;
-      box-shadow: 0 0 16px rgba(34, 197, 94, .3);
-      transition: background .2s, transform .2s, box-shadow .2s;
-      white-space: nowrap;
-    }
-
-    .nav-wa:hover {
-      background: var(--wa-dark);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba(34, 197, 94, .45);
-    }
-
-    @media (min-width: 768px) {
-      .nav {
-        padding: 0 3rem;
-        height: 64px;
-      }
-
-      .nav-links {
-        display: flex;
-      }
-    }
-
-    /* =========================================
-   HERO
-========================================= */
-    .hero {
-      min-height: 100svh;
-      background: var(--bg);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      overflow: hidden;
-      padding: 5rem 1.25rem 3.5rem;
-    }
-
-    .hero-circuit {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .hero-mesh {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background:
-        radial-gradient(ellipse 70% 55% at 15% 25%, rgba(79, 110, 247, .38) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 70% at 88% 65%, rgba(139, 92, 246, .22) 0%, transparent 58%),
-        radial-gradient(ellipse 40% 40% at 55% 15%, rgba(34, 211, 238, .12) 0%, transparent 55%),
-        var(--bg);
-      animation: meshShift 14s ease-in-out infinite alternate;
-    }
-
-    @keyframes meshShift {
-      0% {
-        filter: hue-rotate(0deg) brightness(1);
-      }
-
-      100% {
-        filter: hue-rotate(12deg) brightness(1.1);
-      }
-    }
-
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px);
-      background-size: 56px 56px;
-      mask-image: radial-gradient(ellipse at 50% 50%, black 35%, transparent 78%);
-    }
-
-    .hero-tag {
-      position: relative;
-      z-index: 1;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--glass);
-      border: 1px solid var(--glass-b);
-      color: var(--text-muted);
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      padding: .42rem .95rem;
-      border-radius: 50px;
-      margin-bottom: 1.75rem;
-      width: fit-content;
-      animation: fadeUp .8s var(--ease-out) both;
-    }
-
-    .hero-tag-pulse {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--wa);
-      animation: pulse 1.8s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, .5);
-      }
-
-      50% {
-        box-shadow: 0 0 0 7px rgba(34, 197, 94, 0);
-      }
-    }
-
-    .hero-h1 {
-      position: relative;
-      z-index: 1;
-      font-family: var(--f-display);
-      font-weight: 800;
-      font-size: clamp(2.4rem, 8.5vw, 5.5rem);
-      line-height: 1.06;
-      letter-spacing: -.045em;
-      color: var(--white);
-      margin-bottom: 1.6rem;
-      animation: fadeUp .9s .1s var(--ease-out) both;
-    }
-
-    .hero-h1 .hl-neon {
-      background: linear-gradient(90deg, var(--neon-mid), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-h1 .hl-outline {
-      color: transparent;
-      -webkit-text-stroke: 1.5px rgba(255, 255, 255, .35);
-    }
-
-    .hero-sub {
-      position: relative;
-      z-index: 1;
-      color: var(--text-muted);
-      font-size: clamp(.94rem, 2.5vw, 1.1rem);
-      max-width: 520px;
-      margin-bottom: 2.5rem;
-      line-height: 1.75;
-      animation: fadeUp .9s .2s var(--ease-out) both;
-    }
-
-    .hero-ctas {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: .9rem;
-      animation: fadeUp .9s .3s var(--ease-out) both;
-    }
-
-    @media (min-width: 480px) {
-      .hero-ctas {
-        flex-direction: row;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--wa);
-      color: var(--white);
-      font-family: var(--f-display);
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 1rem 1.85rem;
-      border-radius: var(--r-lg);
-      box-shadow: 0 0 0 0 rgba(34, 197, 94, .4), 0 0 30px rgba(34, 197, 94, .2);
-      transition: transform .25s var(--ease-out), box-shadow .25s, background .2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-primary::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, .18), transparent);
-      opacity: 0;
-      transition: opacity .25s;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 12px 44px rgba(34, 197, 94, .5);
-      background: var(--wa-dark);
-    }
-
-    .btn-primary:hover::after {
-      opacity: 1;
-    }
-
-    .btn-ghost {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-muted);
-      font-size: .9rem;
-      font-weight: 500;
-      padding: .9rem 1.2rem;
-      border-radius: var(--r-lg);
-      border: 1px solid var(--glass-b);
-      background: var(--glass);
-      transition: background .2s, color .2s, transform .2s, border-color .2s;
-    }
-
-    .btn-ghost:hover {
-      background: rgba(255, 255, 255, .08);
-      color: var(--white);
-      border-color: rgba(255, 255, 255, .18);
-      transform: translateY(-2px);
-    }
-
-    .hero-strip {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      gap: 2.5rem;
-      flex-wrap: wrap;
-      margin-top: 3.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--line);
-      animation: fadeUp .9s .45s var(--ease-out) both;
-    }
-
-    .hero-stat strong {
-      display: block;
-      font-family: var(--f-display);
-      font-weight: 800;
-      font-size: 1.5rem;
-      color: var(--white);
-      letter-spacing: -.03em;
-    }
-
-    .hero-stat span {
-      font-size: .74rem;
-      color: var(--text-muted);
-      letter-spacing: .02em;
-    }
-
-    @media (min-width: 768px) {
-      .hero {
-        padding: 7rem 3rem 4.5rem;
-        justify-content: center;
-        min-height: 100svh;
-      }
-
-      .hero-h1 {
-        max-width: 860px;
-      }
-    }
-
-    /* =========================================
-   SECTION HELPERS
-========================================= */
-    .section {
-      padding: 5rem 1.25rem;
-    }
-
-    @media (min-width: 768px) {
-      .section {
-        padding: 7.5rem 3rem;
-      }
-    }
-
-    .wrap {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--neon-mid);
-      margin-bottom: 1.1rem;
-    }
-
-    .eyebrow::before {
-      content: '';
-      width: 20px;
-      height: 2px;
-      background: linear-gradient(90deg, var(--neon), var(--cyan));
-      border-radius: 2px;
-    }
-
-    .section-title {
-      font-family: var(--f-display);
-      font-weight: 800;
-      font-size: clamp(1.8rem, 4.5vw, 2.9rem);
-      line-height: 1.1;
-      letter-spacing: -.038em;
-      color: var(--white);
-      margin-bottom: 1rem;
-    }
-
-    .section-sub {
-      font-size: clamp(.9rem, 2vw, 1.05rem);
-      color: var(--text-muted);
-      max-width: 520px;
-      line-height: 1.8;
-    }
-
-    /* =========================================
-   SERVICIOS
-========================================= */
-    #servicios {
-      background: var(--bg-2);
-    }
-
-    .services-header {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      margin-bottom: 3.5rem;
-    }
-
-    @media (min-width: 768px) {
-      .services-header {
-        flex-direction: row;
-        align-items: flex-end;
-        justify-content: space-between;
-      }
-
-      .services-header .section-sub {
-        margin-left: auto;
-        text-align: right;
-      }
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-
-    @media (min-width: 640px) {
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (min-width: 960px) {
-      .services-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    .service-card {
-      background: var(--bg-card);
-      border: 1px solid var(--glass-b);
-      border-radius: var(--r-lg);
-      padding: 2rem 1.75rem;
-      position: relative;
-      overflow: hidden;
-      transition: transform .3s var(--ease-out), box-shadow .3s, border-color .3s;
-      cursor: default;
-      backdrop-filter: blur(8px);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(79, 110, 247, .06) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity .35s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(79, 110, 247, .15);
-      border-color: rgba(79, 110, 247, .3);
-    }
-
-    .service-card:hover::before {
-      opacity: 1;
-    }
-
-    .service-card-accent {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--neon), var(--cyan));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .4s var(--ease-out);
-    }
-
-    .service-card:hover .service-card-accent {
-      transform: scaleX(1);
-    }
-
-    .service-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--r-sm);
-      background: rgba(79, 110, 247, .12);
-      border: 1px solid rgba(79, 110, 247, .2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-      margin: 0 auto 1.25rem;
-      position: relative;
-      z-index: 1;
-      transition: transform .3s var(--ease-out), background .3s, box-shadow .3s;
-    }
-
-    .service-card:hover .service-icon {
-      transform: scale(1.1) rotate(-4deg);
-      background: rgba(79, 110, 247, .22);
-      box-shadow: 0 0 20px rgba(79, 110, 247, .3);
-    }
-
-    .service-card h3 {
-      font-family: var(--f-display);
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--white);
-      margin-bottom: .6rem;
-      position: relative;
-      z-index: 1;
-      letter-spacing: -.02em;
-      min-height: 3.2em;
-    }
-
-    .service-card p {
-      font-size: .87rem;
-      color: var(--text-muted);
-      line-height: 1.72;
-      position: relative;
-      z-index: 1;
-      flex: 1;
-    }
-
-    .service-card-tag {
-      display: inline-block;
-      margin-top: 1.25rem;
-      font-size: .72rem;
-      font-weight: 600;
-      color: var(--neon-mid);
-      letter-spacing: .04em;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* =========================================
-   PROCESO
-========================================= */
-    #proceso {
-      background: var(--bg);
-    }
-
-    .steps-layout {
-      display: grid;
-      gap: 0;
-      margin-top: 3.5rem;
-    }
-
-    .step-item {
-      display: grid;
-      grid-template-columns: 56px 1fr;
-      gap: 1.25rem;
-      padding: 2rem 0;
-      border-bottom: 1px solid var(--line);
-      align-items: start;
-    }
-
-    .step-item:last-child {
-      border-bottom: none;
-    }
-
-    .step-num-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-    }
-
-    .step-num {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--neon), var(--purple));
-      color: var(--white);
-      font-family: var(--f-display);
-      font-weight: 800;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 8px 28px var(--neon-glow);
-      position: relative;
-    }
-
-    .step-num::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      border: 1.5px dashed rgba(79, 110, 247, .35);
-      animation: rotateDash 8s linear infinite;
-    }
-
-    @keyframes rotateDash {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .step-line {
-      width: 1.5px;
-      flex: 1;
-      min-height: 40px;
-      background: linear-gradient(to bottom, var(--neon), transparent);
-      opacity: .2;
-    }
-
-
-    .step-body {
-      padding-top: .5rem;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .step-body h3 {
-      font-family: var(--f-display);
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: -.025em;
-      color: var(--white);
-      margin-bottom: .45rem;
-      min-height: 2.6em;
-    }
-
-    .step-body p {
-      font-size: .9rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-      flex: 1;
-    }
-
-    .step-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: .85rem;
-      background: rgba(79, 110, 247, .1);
-      border: 1px solid rgba(79, 110, 247, .2);
-      color: var(--neon-mid);
-      font-size: .72rem;
-      font-weight: 600;
-      padding: .3rem .75rem;
-      border-radius: 50px;
-    }
-
-    @media (min-width: 768px) {
-      .steps-layout {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0;
-      }
-
-      .step-item {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr;
-        padding: 2.5rem 2rem;
-        border-bottom: none;
-        border-right: 1px solid var(--line);
-      }
-
-      .step-item:last-child {
-        border-right: none;
-      }
-
-      .step-num-wrap {
-        flex-direction: row;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .step-line {
-        width: 40px;
-        min-height: 1.5px;
-        background: linear-gradient(to right, var(--neon), transparent);
-      }
-
-      .step-body {
-        padding-top: 0;
-        align-self: stretch;
-      }
-    }
-
-    /* =========================================
-   CASOS DE ÉXITO
-========================================= */
-    #casos {
-      background: var(--bg-2);
-      overflow: hidden;
-    }
-
-    .case-card {
-      margin-top: 3rem;
-      background: var(--glass);
-      border: 1px solid var(--glass-b);
-      border-radius: var(--r-xl);
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 1fr;
-    }
-
-    @media (min-width: 768px) {
-      .case-card {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .case-visual {
-      background: linear-gradient(140deg, #0d1a40 0%, #1a2d6b 50%, #0f3460 100%);
-      padding: 3rem 2.5rem;
-      position: relative;
-      overflow: hidden;
-      min-height: 280px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-    }
-
-    .case-visual::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 70% 30%, rgba(79, 110, 247, .25) 0%, transparent 60%);
-    }
-
-    .case-visual-deco {
-      position: absolute;
-      top: -20px;
-      right: -20px;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(79, 110, 247, .12) 0%, transparent 70%);
-      z-index: 0;
-    }
-
-    .case-visual-deco2 {
-      position: absolute;
-      bottom: -40px;
-      left: -40px;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      border: 1px solid rgba(79, 110, 247, .1);
-      z-index: 0;
-    }
-
-    .case-type {
-      display: inline-block;
-      font-size: .68rem;
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, .65);
-      background: rgba(79, 110, 247, .2);
-      border: 1px solid rgba(79, 110, 247, .3);
-      padding: .3rem .8rem;
-      border-radius: 50px;
-      margin-bottom: 1rem;
-      width: fit-content;
-      position: relative;
-      z-index: 1;
-    }
-
-    .case-visual h3 {
-      font-family: var(--f-display);
-      font-weight: 800;
-      font-size: clamp(1.3rem, 3vw, 1.9rem);
-      color: var(--white);
-      letter-spacing: -.03em;
-      line-height: 1.2;
-      position: relative;
-      z-index: 1;
-    }
-
-    .case-visual-emoji {
-      position: absolute;
-      right: 2rem;
-      top: 2rem;
-      font-size: 5rem;
-      opacity: .1;
-      z-index: 0;
-    }
-
-    .case-client {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: .85rem;
-      font-size: .78rem;
-      font-weight: 600;
-      color: var(--cyan);
-      position: relative;
-      z-index: 1;
-      letter-spacing: .03em;
-    }
-
-    .case-content {
-      padding: 2.5rem 2rem;
-    }
-
-    .case-content-block+.case-content-block {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--line);
-    }
-
-    .case-content-block h4 {
-      font-family: var(--f-display);
-      font-weight: 700;
-      font-size: .82rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: .6rem;
-    }
-
-    .case-content-block p {
-      font-size: .9rem;
-      color: rgba(226, 232, 240, .72);
-      line-height: 1.78;
-    }
-
-    .case-metrics {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-      padding-top: 1.75rem;
-      border-top: 1px solid var(--line);
-    }
-
-    .metric-item strong {
-      display: block;
-      font-family: var(--f-display);
-      font-weight: 800;
-      font-size: 1.8rem;
-      color: var(--white);
-      letter-spacing: -.04em;
-    }
-
-    .metric-item strong span {
-      color: var(--neon-mid);
-    }
-
-    .metric-item small {
-      font-size: .74rem;
-      color: var(--text-muted);
-      display: block;
-      margin-top: .15rem;
-    }
-
-    /* More cases teaser */
-    .more-cases {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    @media (min-width: 640px) {
-      .more-cases {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    .mini-case {
-      background: var(--glass);
-      border: 1px solid var(--glass-b);
-      border-radius: var(--r-md);
-      padding: 1.4rem 1.5rem;
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-      transition: border-color .25s, background .25s;
-    }
-
-    .mini-case:hover {
-      border-color: rgba(79, 110, 247, .3);
-      background: rgba(79, 110, 247, .06);
-    }
-
-    .mini-case-icon {
-      font-size: 1.6rem;
-      flex-shrink: 0;
-    }
-
-    .mini-case h4 {
-      font-family: var(--f-display);
-      font-weight: 700;
-      font-size: .9rem;
-      color: var(--white);
-      margin-bottom: .3rem;
-      letter-spacing: -.015em;
-    }
-
-    .mini-case p {
-      font-size: .82rem;
-      color: var(--text-muted);
-      line-height: 1.65;
-    }
-
-    /* =========================================
-   NOSOTROS
-========================================= */
-    #nosotros {
-      background: var(--bg);
-    }
-
-    .about-layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    @media (min-width: 768px) {
-      .about-layout {
-        grid-template-columns: 1.2fr 1fr;
-        gap: 3.5rem;
-        align-items: start;
-      }
-    }
-
-    .about-main-text {
-      font-size: clamp(1rem, 2.2vw, 1.12rem);
-      color: rgba(226, 232, 240, .75);
-      line-height: 1.9;
-    }
-
-    .about-main-text p+p {
-      margin-top: 1.1rem;
-    }
-
-    .about-main-text strong {
-      color: var(--white);
-      font-weight: 600;
-    }
-
-    .about-quote {
-      margin-top: 2rem;
-      padding: 1.5rem 1.75rem;
-      background: rgba(79, 110, 247, .07);
-      border-left: 3px solid var(--neon);
-      border-radius: 0 var(--r-md) var(--r-md) 0;
-      font-size: .95rem;
-      color: rgba(226, 232, 240, .78);
-      line-height: 1.72;
-      font-style: italic;
-    }
-
-    .about-quote cite {
-      display: block;
-      margin-top: .75rem;
-      font-size: .78rem;
-      font-weight: 600;
-      font-style: normal;
-      color: var(--neon-mid);
-      letter-spacing: .03em;
-    }
-
-    .about-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .about-card {
-      background: var(--glass);
-      border: 1px solid var(--glass-b);
-      border-radius: var(--r-md);
-      padding: 1.35rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      transition: border-color .25s, box-shadow .25s, transform .25s;
-    }
-
-    .about-card:hover {
-      border-color: rgba(79, 110, 247, .3);
-      box-shadow: 0 8px 30px rgba(79, 110, 247, .1);
-      transform: translateX(4px);
-    }
-
-    .about-card-icon {
-      font-size: 1.3rem;
-      flex-shrink: 0;
-      width: 40px;
-      height: 40px;
-      background: rgba(79, 110, 247, .1);
-      border: 1px solid rgba(79, 110, 247, .18);
-      border-radius: var(--r-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .about-card-body h4 {
-      font-family: var(--f-display);
-      font-weight: 700;
-      font-size: .92rem;
-      color: var(--white);
-      margin-bottom: .3rem;
-      letter-spacing: -.01em;
-    }
-
-    .about-card-body p {
-      font-size: .83rem;
-      color: var(--text-muted);
-      line-height: 1.68;
-    }
-
-    /* =========================================
-   CTA BAND (pre-footer)
-========================================= */
-    .cta-band {
-      background: linear-gradient(135deg, #0d1a40 0%, #0f1e50 50%, #0a1535 100%);
-      padding: 5rem 1.25rem;
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-    }
-
-    .cta-band::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 70% at 50% 50%, rgba(79, 110, 247, .18) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 20% 20%, rgba(139, 92, 246, .1) 0%, transparent 60%);
-    }
-
-    .cta-band-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
-      background-size: 48px 48px;
-    }
-
-    .cta-band-inner {
-      position: relative;
-      z-index: 1;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-
-    .cta-band-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: .72rem;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      margin-bottom: 1.5rem;
-    }
-
-    .cta-band-label::before {
-      content: '';
-      width: 20px;
-      height: 2px;
-      background: var(--cyan);
-      border-radius: 2px;
-    }
-
-    .cta-band h2 {
-      font-family: var(--f-display);
-      font-weight: 800;
-      font-size: clamp(1.75rem, 4.5vw, 2.8rem);
-      line-height: 1.12;
-      letter-spacing: -.038em;
-      color: var(--white);
-      margin-bottom: 1rem;
-    }
-
-    .cta-band p {
-      font-size: clamp(.9rem, 2vw, 1.05rem);
-      color: var(--text-muted);
-      line-height: 1.78;
-      margin-bottom: 2.25rem;
-    }
-
-    .btn-wa-cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      background: var(--wa);
-      color: var(--white);
-      font-family: var(--f-display);
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 1.2rem 2.25rem;
-      border-radius: var(--r-lg);
-      box-shadow: 0 0 0 0 rgba(34, 197, 94, .4), 0 10px 50px rgba(34, 197, 94, .3);
-      transition: transform .3s var(--ease-out), box-shadow .3s, background .2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-wa-cta::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, .2), transparent);
-      opacity: 0;
-      transition: opacity .3s;
-    }
-
-    .btn-wa-cta:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 20px 60px rgba(34, 197, 94, .5);
-      background: var(--wa-dark);
-    }
-
-    .btn-wa-cta:hover::before {
-      opacity: 1;
-    }
-
-    .cta-note {
-      margin-top: 1.1rem;
-      font-size: .78rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    @media (min-width: 768px) {
-      .cta-band {
-        padding: 7rem 3rem;
-      }
-    }
-
-    /* =========================================
-   FLOATING WA BUTTON
-========================================= */
-    .wa-float {
-      position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      z-index: 1000;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--wa);
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 32px rgba(34, 197, 94, .5);
-      transition: transform .3s var(--ease-out), box-shadow .3s;
-      animation: floatPulse 2.2s ease-in-out infinite;
-    }
-
-    .wa-float:hover {
-      transform: scale(1.12) translateY(-2px);
-      box-shadow: 0 14px 52px rgba(34, 197, 94, .65);
-      animation: none;
-    }
-
-    @keyframes floatPulse {
-
-      0%,
-      100% {
-        box-shadow: 0 8px 32px rgba(34, 197, 94, .5);
-      }
-
-      50% {
-        box-shadow: 0 8px 52px rgba(34, 197, 94, .75);
-      }
-    }
-
-    /* =========================================
-   FOOTER
-========================================= */
-    footer {
-      background: #040710;
-      padding: 2.5rem 1.25rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: .75rem;
-      text-align: center;
-      border-top: 1px solid var(--line);
-    }
-
-    @media (min-width: 768px) {
-      footer {
-        padding: 2.5rem 3rem;
-      }
-    }
-
-    .footer-logo {
-      font-family: var(--f-display);
-      font-weight: 800;
-      font-size: 1.1rem;
-      color: var(--white);
-      letter-spacing: -.03em;
-    }
-
-    .footer-logo span {
-      color: var(--neon-mid);
-    }
-
-    footer p {
-      font-size: .77rem;
-      color: rgba(226, 232, 240, .28);
-    }
-
-    /* =========================================
-   SCROLL REVEAL
-========================================= */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      filter: blur(5px);
-      transition: opacity .7s var(--ease-soft), transform .7s var(--ease-soft), filter .6s var(--ease-soft);
-    }
-
-    .reveal.in {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
-    }
-
-    .reveal-delay-1 {
-      transition-delay: .1s;
-    }
-
-    .reveal-delay-2 {
-      transition-delay: .2s;
-    }
-
-    .reveal-delay-3 {
-      transition-delay: .3s;
-    }
-
-    .reveal-delay-4 {
-      transition-delay: .4s;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(28px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* WA icon */
-    .wa-icon {
-      flex-shrink: 0;
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
-    }
-
-    /* =========================================
-   EXTRA EFFECTS
-========================================= */
-
-    /* Service card spotlight (mouse-tracked radial glow) */
-    .service-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        circle 200px at var(--mx, -999px) var(--my, -999px),
-        rgba(109, 133, 255, .16),
-        transparent 70%
-      );
-      border-radius: inherit;
-      opacity: 0;
-      transition: opacity .3s;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .service-card:hover::after {
-      opacity: 1;
-    }
-
-    /* CTA band light sweep */
-    .cta-band::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 45%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(79, 110, 247, .055) 40%,
-        rgba(34, 211, 238, .04) 60%,
-        transparent 100%
-      );
-      animation: ctaSweep 8s ease-in-out infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    @keyframes ctaSweep {
-      0%   { transform: translateX(-100%); }
-      100% { transform: translateX(340%); }
-    }
-
-    /* Counter number flash on arrival */
-    @keyframes numPop {
-      0%   { transform: scale(.85); opacity: 0; }
-      60%  { transform: scale(1.08); }
-      100% { transform: scale(1);   opacity: 1; }
-    }
-
-    .hero-stat strong.counting,
-    .metric-item strong.counting {
-      animation: numPop .45s var(--ease-out) both;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-  <!-- ===================== NAV ===================== -->
+  <!-- =========================================================================
+       NAV — barra fija
+       El logo es texto blanco fijo; el unico color es el punto que titila.
+       La linea celeste inferior es .nav::after en styles.css.
+       ========================================================================= -->
   <nav class="nav">
     <a href="#" class="nav-logo">
       <div class="nav-logo-dot"></div>
@@ -1537,66 +147,153 @@
     </a>
   </nav>
 
-  <!-- ===================== HERO ===================== -->
+  <!-- =========================================================================
+       HERO — primera pantalla
+       Dos columnas en desktop (texto | panel), apiladas en celular.
+
+       El <h1> esta partido en tres <span class="hero-line">, cada uno con un
+       span adentro. Esa doble capa NO es decorativa: la de afuera recorta y la
+       de adentro sube desde abajo, y asi el titular se revela linea por linea.
+       Si agregas o sacas una linea, ajusta los nth-child de .hero-line en
+       styles.css, que son los que escalonan los tiempos.
+
+       El .panel es un mockup ilustrativo y decorativo: va con aria-hidden.
+       Los datos que muestra los inyecta el bloque 8 del JavaScript.
+       ========================================================================= -->
   <section class="hero">
     <div class="hero-mesh"></div>
     <div class="hero-grid"></div>
     <canvas class="hero-circuit"></canvas>
 
-    <div class="wrap">
-      <div class="hero-tag">
-        <div class="hero-tag-pulse"></div>
-        Automatización de procesos para empresas que escalan
+    <div class="wrap hero-wrap">
+      <div class="hero-layout">
+
+        <!-- ---------- Columna de texto ---------- -->
+        <div class="hero-copy">
+          <div class="hero-tag">
+            <div class="hero-tag-pulse"></div>
+            Sistemas a medida · CABA
+          </div>
+
+          <h1 class="hero-h1">
+            <span class="hero-line"><span>Tu local sigue</span></span>
+            <span class="hero-line"><span>funcionando</span></span>
+            <span class="hero-line"><span class="hl-neon">aunque vos no estés</span></span>
+          </h1>
+
+          <p class="hero-sub">
+            Sistemas de gestión a medida para llevar turnos, stock y caja sin planillas.
+            Y bots de WhatsApp que atienden cuando vos no podés. Armamos la pieza que a
+            tu negocio le falta — andando en semanas, no en meses.
+          </p>
+
+          <div class="hero-ctas">
+            <a class="btn-primary"
+              href="https://wa.me/5491166920754?text=Hola%2C%20vi%20la%20web%20de%20Techbrothers%20y%20quiero%20saber%20m%C3%A1s"
+              target="_blank" rel="noopener noreferrer">
+              <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              Agendar diagnóstico gratis
+            </a>
+            <a class="btn-ghost" href="#casos">Ver los 5 casos ↓</a>
+          </div>
+        </div>
+
+        <!-- ---------- Demo: el sistema andando ---------- -->
+        <div class="hero-demo">
+          <div class="panel" aria-hidden="true">
+
+            <div class="panel-bar">
+              <span class="panel-dot"></span>
+              <span class="panel-dot"></span>
+              <span class="panel-dot"></span>
+              <span class="panel-bar-title">Panel del negocio</span>
+            </div>
+
+            <div class="panel-body">
+
+              <div class="panel-head">
+                <div>
+                  <span class="panel-eyebrow">Agenda de hoy</span>
+                  <strong class="panel-day">Martes 17</strong>
+                </div>
+                <span class="panel-live"><i></i>En vivo</span>
+              </div>
+
+              <ul class="agenda" id="agendaList">
+                <li class="ag-row is-done">
+                  <span class="ag-time">09:00</span>
+                  <span class="ag-name">Cliente A</span>
+                  <span class="ag-state ag-ok">Atendido</span>
+                </li>
+                <li class="ag-row is-done">
+                  <span class="ag-time">10:30</span>
+                  <span class="ag-name">Cliente B</span>
+                  <span class="ag-state ag-ok">Atendido</span>
+                </li>
+                <li class="ag-row">
+                  <span class="ag-time">15:00</span>
+                  <span class="ag-name">Cliente C</span>
+                  <span class="ag-state">Confirmado</span>
+                </li>
+              </ul>
+
+              <div class="panel-tiles">
+                <div class="tile">
+                  <span class="tile-label">Caja del día</span>
+                  <strong class="tile-value" id="tileCaja">$184.500</strong>
+                </div>
+                <div class="tile">
+                  <span class="tile-label">Turnos de hoy</span>
+                  <strong class="tile-value" id="tileTurnos">3</strong>
+                </div>
+                <div class="tile">
+                  <span class="tile-label">Stock bajo</span>
+                  <strong class="tile-value tile-warn">3</strong>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <p class="demo-caption">
+            Así se ve un sistema nuestro andando.
+            <a href="#casos">Mirá los casos reales</a>
+          </p>
+        </div>
+
       </div>
 
-      <h1 class="hero-h1">
-        Encontramos<br>
-        la mejor solución<br>
-        <span class="hl-neon">para tu negocio</span><br>
-
-      </h1>
-
-      <p class="hero-sub">
-        Mientras tu competencia sigue anotando en papeles y perdiendo tiempo,
-        Vos podes tener un sistema que se organiza solo y te facilita las tareas diarias.
-        Te damos la libertad de que tu empresa crezca sin que tú tengas que estar encima de cada detalle.
-      </p>
-
-      <div class="hero-ctas">
-        <a class="btn-primary"
-          href="https://wa.me/5491166920754?text=Hola%2C%20vi%20la%20web%20de%20Techbrothers%20y%20quiero%20saber%20m%C3%A1s"
-          target="_blank" rel="noopener noreferrer">
-          <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-          </svg>
-          Agendar diagnóstico gratis
-        </a>
-        <a class="btn-ghost" href="#casos">Ver casos reales ↓</a>
-      </div>
-
+      <!-- ---------- Prueba ---------- -->
       <div class="hero-strip">
         <div class="hero-stat">
           <strong>−80%</strong>
-          <span>Tiempo en tareas manuales</span>
+          <span>Menos tiempo en administración</span>
         </div>
         <div class="hero-stat">
           <strong>24/7</strong>
-          <span>Operación automatizada</span>
+          <span>El bot responde cuando vos no podés</span>
         </div>
         <div class="hero-stat">
-          <strong>0</strong>
-          <span>Intermediarios</span>
+          <strong>5</strong>
+          <span>Sistemas y sitios entregados</span>
         </div>
-        <div class="hero-stat">
-          <strong>100%</strong>
-          <span>A medida, no enlatado</span>
-        </div>
+        <p class="hero-strip-note">
+          Métricas de proyectos propios. Cada caso, con su cliente,
+          <a href="#casos">más abajo</a>.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- ===================== SERVICIOS ===================== -->
+  <!-- =========================================================================
+       SERVICIOS — 4 tarjetas
+       Los iconos son SVG en linea con class="ico": heredan el color del padre
+       via currentColor, asi que cambiar el color de la tarjeta alcanza.
+       NO usar emojis aca: fue una decision de diseno explicita.
+       ========================================================================= -->
   <section class="section" id="servicios">
     <div class="wrap">
       <div class="services-header">
@@ -1612,7 +309,7 @@
       <div class="services-grid">
         <div class="service-card reveal">
           <div class="service-card-accent"></div>
-          <div class="service-icon">💬</div>
+          <div class="service-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3 8.7 8.7 0 0 1-3.9-.9L3 21l1.9-5.1a8.2 8.2 0 0 1-1-4A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg></div>
           <h3>Chatbots & Asistentes IA</h3>
           <p>Un asistente inteligente en WhatsApp que atiende clientes, da turnos y filtra interesados por ti, incluso
             mientras duermes.</p>
@@ -1620,7 +317,7 @@
         </div>
         <div class="service-card reveal reveal-delay-1">
           <div class="service-card-accent"></div>
-          <div class="service-icon">⚡</div>
+          <div class="service-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>
           <h3>Automatización de Procesos</h3>
           <p>Encontramos las tareas que te hacen perder tiempo y las ponemos a trabajar solas. Desde cobrar facturas
             hasta armar tus reportes: todo fluye sin que tengas que intervenir.</p>
@@ -1628,7 +325,7 @@
         </div>
         <div class="service-card reveal reveal-delay-2">
           <div class="service-card-accent"></div>
-          <div class="service-icon">🛠️</div>
+          <div class="service-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="m6.08 9.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/><path d="m6.08 14.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/></svg></div>
           <h3>Sistemas a Medida</h3>
           <p>Deja de usar programas complicados que no te sirven. Te entregamos una herramienta a medida para que
             manejes el stock, las ventas y tus ganancias desde la palma de tu mano.</p>
@@ -1636,7 +333,7 @@
         </div>
         <div class="service-card reveal reveal-delay-3">
           <div class="service-card-accent"></div>
-          <div class="service-icon">🔌</div>
+          <div class="service-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg></div>
           <h3>Integraciones & APIs</h3>
           <p>Conectamos tus herramientas existentes: CRM, WhatsApp, e-mail, facturación. Un ecosistema unificado que
             elimina el trabajo duplicado y los datos aislados.</p>
@@ -1646,7 +343,11 @@
     </div>
   </section>
 
-  <!-- ===================== PROCESO ===================== -->
+  <!-- =========================================================================
+       PROCESO — los 3 pasos
+       En desktop van en 3 columnas separadas por lineas verticales; en celular
+       se apilan. La linea que une los pasos es .step-line.
+       ========================================================================= -->
   <section class="section" id="proceso">
     <div class="wrap">
       <div class="eyebrow">Transparencia total</div>
@@ -1663,7 +364,7 @@
             <h3>Identificamos tu problema</h3>
             <p>Analizamos en qué puntos tu equipo pierde tiempo y tu empresa pierde dinero. Una charla de 30 minutos nos
               da el diagnóstico completo.</p>
-            <span class="step-badge">🎯 Diagnóstico al instante</span>
+            <span class="step-badge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Diagnóstico al instante</span>
           </div>
         </div>
         <div class="step-item reveal reveal-delay-1">
@@ -1675,7 +376,7 @@
             <h3>Construimos la solución</h3>
             <p>Desarrollamos exactamente lo que tu negocio necesita. Sin plataformas genéricas, sin funciones que no
               usás.</p>
-            <span class="step-badge">💳 Solución a medida</span>
+            <span class="step-badge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Solución a medida</span>
           </div>
         </div>
         <div class="step-item reveal reveal-delay-2">
@@ -1687,63 +388,275 @@
             <h3>Soporte constante</h3>
             <p> Nos ocupamos de que tu tecnología nunca se detenga. Seguimos tu progreso de cerca y estamos disponibles
               para resolver tus dudas y mantener todo bajo control.</p>
-            <span class="step-badge">📈 Seguimiento cercano</span>
+            <span class="step-badge"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>Seguimiento cercano</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== CASOS ===================== -->
+  <!-- =========================================================================
+       CASOS — lista expandible
+       Agrupados por tipo de trabajo. Para agregar uno nuevo, ver la seccion
+       "COMO AGREGAR UN CASO NUEVO" del comentario que abre este archivo.
+
+       Los bloques amarillos <p class="case-pending"> marcan datos que faltan.
+       Son visibles a proposito para que no se publiquen sin completar.
+       ========================================================================= -->
   <section class="section" id="casos">
     <div class="wrap">
-      <div class="eyebrow">Casos de éxito</div>
+      <div class="eyebrow">Casos</div>
       <h2 class="section-title">Lo que ya construimos</h2>
+      <p class="section-sub cases-intro">
+        Cinco proyectos entregados. Los dos sitios se pueden visitar; de los
+        sistemas mostramos el producto andando.
+      </p>
 
-      <div class="case-card reveal">
-        <div class="case-visual">
-          <div class="case-visual-deco"></div>
-          <div class="case-visual-deco2"></div>
-          <div class="case-visual-emoji">✂️</div>
-          <span class="case-type">Sistema de Gestión + Chatbot</span>
-          <h3>Sistema Inteligente<br>para Peluquería</h3>
-          <div class="case-client">→ ac_teamok</div>
+      <div class="cases">
+
+        <h3 class="cases-group">Sistemas de gestión a medida</h3>
+
+        <div class="case-row" id="caso-peluqueria">
+          <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-peluqueria-panel">
+            <span class="case-client">Peluquería · ac_teamok</span>
+            <span class="case-tag">Sistema</span>
+            <span class="case-year">2025</span>
+            <span class="case-resumen">Turnos, stock y caja en un solo lugar</span>
+            <span class="case-plus" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="case-panel" id="caso-peluqueria-panel" role="region">
+            <div class="case-panel-inner">
+              <div class="case-text">
+                <div class="case-block">
+                  <h4>El problema</h4>
+                  <p>El dueño perdía horas por semana en planillas de Excel mal completadas: turnos que se pisaban, stock sin control y caja que no cerraba. Toda la gestión en papel y anotaciones que se perdían.</p>
+                </div>
+                <div class="case-block">
+                  <h4>Lo que hicimos</h4>
+                  <p>Un sistema propio para el local: agenda de turnos, control de stock en tiempo real, cierre de caja digital y métricas del negocio accesibles desde el celular.</p>
+                </div>
+                <div class="case-block">
+                  <h4>El resultado</h4>
+                  <p>El dueño dejó de administrar en papel. Hoy carga un turno en segundos y ve la caja del día sin abrir una planilla.</p>
+                </div>
+                <div class="case-metrics-row"><div class="cm-item"><strong>−80%</strong><small>Tiempo en administración</small></div><div class="cm-item"><strong>0</strong><small>Errores de caja</small></div></div>
+                <div class="case-foot">
+                  <span class="case-stack">React · Supabase · PostgreSQL</span>
+                </div>
+                <p class="case-pending">PENDIENTE: confirmar si ac_teamok autoriza que usemos su nombre.</p>
+              </div>
+              
+          <figure class="case-media" data-media-pending>
+            <div class="case-media-slot">
+              <span>Video del sistema andando</span>
+            </div>
+          </figure>
+            </div>
+          </div>
         </div>
-        <div class="case-content">
-          <div class="case-content-block">
-            <h4>El problema operativo</h4>
-            <p>El dueño perdía horas por semana en planillas de Excel mal completadas: turnos que se pisaban, stock sin
-              control y caja que no cerraba. Toda la gestión en papel y anotaciones que se perdían constantemente.</p>
-          </div>
-          <div class="case-content-block">
-            <h4>Lo que automatizamos</h4>
-            <p>Reemplazamos el caos por un sistema propio: agendamiento de turnos automático vía WhatsApp,
-              control de stock en tiempo real, cierre de caja digital y métricas del local accesibles desde el celular.
-            </p>
-          </div>
-          <div class="case-metrics">
-            <div class="metric-item">
-              <strong><span>−</span>80%</strong>
-              <small>Tiempo en administración</small>
+        <div class="case-row" id="caso-estudio">
+          <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-estudio-panel">
+            <span class="case-client">Estudio jurídico</span>
+            <span class="case-tag">Sistema</span>
+            <span class="case-year">2026</span>
+            <span class="case-resumen">Gestión de expedientes y clientes</span>
+            <span class="case-plus" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="case-panel" id="caso-estudio-panel" role="region">
+            <div class="case-panel-inner">
+              <div class="case-text">
+                <div class="case-block">
+                  <h4>El problema</h4>
+                  <p>COMPLETAR: cómo llevaban los expedientes antes (carpetas físicas, Excel, vencimientos que se pasaban).</p>
+                </div>
+                <div class="case-block">
+                  <h4>Lo que hicimos</h4>
+                  <p>COMPLETAR: qué módulos tiene el sistema (expedientes, clientes, vencimientos, documentos, honorarios).</p>
+                </div>
+                <div class="case-block">
+                  <h4>El resultado</h4>
+                  <p>COMPLETAR: qué cambió para el estudio, idealmente con un número.</p>
+                </div>
+                
+                <div class="case-foot">
+                  <span class="case-stack">COMPLETAR: stack</span>
+                </div>
+                <p class="case-pending">PENDIENTE: me falta la historia de este caso. Sin chatbot conectado — no mencionar WhatsApp acá.</p>
+              </div>
+              
+          <figure class="case-media" data-media-pending>
+            <div class="case-media-slot">
+              <span>Video del sistema andando</span>
             </div>
-            <div class="metric-item">
-              <strong>0</strong>
-              <small>Errores de caja</small>
+          </figure>
             </div>
-            <div class="metric-item">
-              <strong>100%</strong>
-              <small>Turnos online 24/7</small>
+          </div>
+        </div>
+        <h3 class="cases-group">Chatbots de WhatsApp</h3>
+
+        <div class="case-row" id="caso-perfumeria">
+          <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-perfumeria-panel">
+            <span class="case-client">Perfumería</span>
+            <span class="case-tag">Chatbot</span>
+            <span class="case-year">2025</span>
+            <span class="case-resumen">Consultas de stock y reservas, automáticas</span>
+            <span class="case-plus" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="case-panel" id="caso-perfumeria-panel" role="region">
+            <div class="case-panel-inner">
+              <div class="case-text">
+                <div class="case-block">
+                  <h4>El problema</h4>
+                  <p>Las consultas por WhatsApp llegaban todo el día — precio, stock, horarios — y se contestaban a mano entre cliente y cliente. Muchas quedaban sin respuesta hasta el otro día.</p>
+                </div>
+                <div class="case-block">
+                  <h4>Lo que hicimos</h4>
+                  <p>Un bot sobre la API de WhatsApp Business que consulta el stock real, responde precio y disponibilidad, y deja el producto reservado.</p>
+                </div>
+                <div class="case-block">
+                  <h4>El resultado</h4>
+                  <p>Las consultas repetidas se responden solas al instante, a cualquier hora. El mostrador solo atiende lo que el bot no puede resolver.</p>
+                </div>
+                
+                <div class="case-foot">
+                  <span class="case-stack">n8n · Supabase · WhatsApp Business API</span>
+                </div>
+                
+              </div>
+              
+          <figure class="case-media case-media--phone">
+            <div class="phone" aria-hidden="true">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+
+              <div class="chat-head">
+                <div class="chat-avatar">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M9 3h6v3H9zM8 6h8l1 4a5 5 0 0 1-1 8H8a5 5 0 0 1-1-8z" />
+                    <path d="M10 13h4" />
+                  </svg>
+                </div>
+                <div class="chat-head-txt">
+                  <strong>Perfumería · Consultas</strong>
+                  <span>en línea</span>
+                </div>
+              </div>
+
+              <div class="chat-body" id="chatBody">
+                <div class="chat-day">HOY</div>
+              </div>
+
+              <div class="chat-bar">
+                <span>Escribí un mensaje</span>
+              </div>
+
+            </div>
+          </div>
+            <figcaption>Conversación real del bot, reconstruida</figcaption>
+          </figure>
+            </div>
+          </div>
+        </div>
+        <h3 class="cases-group">Sitios institucionales</h3>
+
+        <div class="case-row" id="caso-gts">
+          <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-gts-panel">
+            <span class="case-client">Global Tech Secure</span>
+            <span class="case-tag">Sitio</span>
+            <span class="case-year">2026</span>
+            <span class="case-resumen">Distribuidora de seguridad con más de 30 años</span>
+            <span class="case-plus" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="case-panel" id="caso-gts-panel" role="region">
+            <div class="case-panel-inner">
+              <div class="case-text">
+                <div class="case-block">
+                  <h4>El problema</h4>
+                  <p>Una empresa que representa doce marcas internacionales de radares, biometría y detección perimetral, y le vende a gobierno y a grandes compañías, necesitaba un sitio a la altura de ese portfolio.</p>
+                </div>
+                <div class="case-block">
+                  <h4>Lo que hicimos</h4>
+                  <p>Sitio institucional completo: grilla de las doce soluciones con ficha por marca, sección Nosotros en solapas, módulo de eventos con cuenta regresiva y descarga de recordatorio al calendario, formulario de contacto y mapa de la sede.</p>
+                </div>
+                <div class="case-block">
+                  <h4>El resultado</h4>
+                  <p>El equipo comercial dejó de mandar PDFs sueltos: hoy manda un link donde el prospecto recorre el catálogo y consulta desde ahí.</p>
+                </div>
+                
+                <div class="case-foot">
+                  <span class="case-stack">HTML · CSS · JavaScript · PHP</span>
+                </div>
+                <p class="case-pending">PENDIENTE: pasame la URL pública para poder linkearlo.</p>
+              </div>
+              
+          <figure class="case-media" data-media-pending>
+            <div class="case-media-slot">
+              <span>Captura del sitio</span>
+            </div>
+          </figure>
+            </div>
+          </div>
+        </div>
+        <div class="case-row" id="caso-energies">
+          <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-energies-panel">
+            <span class="case-client">Global Tech Energies</span>
+            <span class="case-tag">Sitio</span>
+            <span class="case-year">2026</span>
+            <span class="case-resumen">Films de enfriamiento radiativo para industria</span>
+            <span class="case-plus" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="case-panel" id="caso-energies-panel" role="region">
+            <div class="case-panel-inner">
+              <div class="case-text">
+                <div class="case-block">
+                  <h4>El problema</h4>
+                  <p>Distribuidor oficial de los films SolCold, una tecnología que baja la temperatura de una superficie sin consumir electricidad. El producto es técnico y necesitaba explicarse solo, sin un vendedor al lado.</p>
+                </div>
+                <div class="case-block">
+                  <h4>Lo que hicimos</h4>
+                  <p>Sitio con la línea de productos explicada uno por uno, sección de sostenibilidad, el marco normativo que obliga a las empresas a controlar el estrés térmico, preguntas frecuentes y formulario de contacto.</p>
+                </div>
+                <div class="case-block">
+                  <h4>El resultado</h4>
+                  <p>La empresa pasó a tener un lugar propio donde explicar una tecnología que casi nadie conoce, en vez de depender del sitio del fabricante.</p>
+                </div>
+                
+                <div class="case-foot">
+                  <span class="case-stack">HTML · CSS · JavaScript</span>
+            <a class="case-ext" href="https://www.globaltechenergies.com/" target="_blank" rel="noopener noreferrer"
+               onclick="event.stopPropagation()">
+              Visitar
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>
+            </a>
+                </div>
+                
+              </div>
+              
+          <figure class="case-media" data-media-pending>
+            <div class="case-media-slot">
+              <span>Captura del sitio</span>
+            </div>
+          </figure>
             </div>
           </div>
         </div>
       </div>
-
-
-
     </div>
   </section>
 
-  <!-- ===================== NOSOTROS ===================== -->
+  <!-- =========================================================================
+       NOSOTROS — texto + 4 tarjetas de valor
+       ========================================================================= -->
   <section class="section" id="nosotros">
     <div class="wrap">
       <div class="eyebrow">Nosotros</div>
@@ -1767,21 +680,21 @@
 
         <div class="about-cards reveal reveal-delay-1">
           <div class="about-card">
-            <div class="about-card-icon">⚡</div>
+            <div class="about-card-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>
             <div class="about-card-body">
               <h4>Velocidad real</h4>
               <p>Sin procesos internos que demoren. Del diagnóstico al primer entregable en días, no meses.</p>
             </div>
           </div>
           <div class="about-card">
-            <div class="about-card-icon">🎯</div>
+            <div class="about-card-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
             <div class="about-card-body">
               <h4>Enfocados en resolver</h4>
               <p>Cada problema tiene su solucion, contanos el tuyo y te olvidate de él.</p>
             </div>
           </div>
           <div class="about-card">
-            <div class="about-card-icon">🤝</div>
+            <div class="about-card-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
             <div class="about-card-body">
               <h4>Trato directo.</h4>
               <p>Hablas cara a cara con quien construye tu sistema. Seguimiento real y soporte siempre disponible de
@@ -1789,7 +702,7 @@
             </div>
           </div>
           <div class="about-card">
-            <div class="about-card-icon">🔒</div>
+            <div class="about-card-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div>
             <div class="about-card-body">
               <h4>Precio justo</h4>
               <p>Un proyecto, un presupuesto acorde.</p>
@@ -1800,7 +713,11 @@
     </div>
   </section>
 
-  <!-- ===================== CTA BAND ===================== -->
+  <!-- =========================================================================
+       CTA BAND — franja de cierre
+       El boton principal va en blanco solido (no azul) para maximo contraste
+       sobre el panel oscuro.
+       ========================================================================= -->
   <section class="cta-band" id="contacto">
     <div class="cta-band-grid"></div>
     <div class="cta-band-inner reveal">
@@ -1819,7 +736,7 @@
         </svg>
         Agendar diagnóstico por WhatsApp
       </a>
-      <p class="cta-note">⚡ Respondemos en menos de una hora </p>
+      <p class="cta-note"><svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Respondemos al instante</p>
     </div>
   </section>
 
@@ -1830,7 +747,11 @@
     <p style="margin-top:.25rem">Hecho por dos hermanos que sí responden el WhatsApp.</p>
   </footer>
 
-  <!-- ===================== FLOATING WA ===================== -->
+  <!-- =========================================================================
+       BURBUJA FLOTANTE DE WHATSAPP
+       Es el unico elemento verde permanente del sitio. El verde se reserva
+       para el canal WhatsApp; como color decorativo no se usa en ningun lado.
+       ========================================================================= -->
   <a class="wa-float"
     href="https://wa.me/5491166920754?text=Hola%2C%20vi%20la%20web%20de%20Techbrothers%20y%20quiero%20saber%20m%C3%A1s"
     target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
@@ -1842,7 +763,32 @@
 
   <!-- ===================== SCRIPTS ===================== -->
   <script>
-    /* ---------- Scroll Reveal ---------- */
+    /* =========================================================================
+       JAVASCRIPT DEL SITIO
+       =========================================================================
+       Todo vanilla, sin librerias. El <script> va al final del <body>, asi que
+       cuando corre el DOM ya existe: no hace falta DOMContentLoaded.
+
+       Los bloques son independientes entre si — se pueden borrar de a uno sin
+       romper el resto. Cada uno arranca con un comentario que dice que hace.
+
+       PATRONES QUE SE REPITEN
+       -----------------------
+       1) IntersectionObserver para no gastar CPU de gusto: las animaciones
+          arrancan cuando el elemento entra en pantalla y frenan cuando sale.
+       2) Chequeo de prefers-reduced-motion: si el usuario pidio menos
+          movimiento, se muestra el estado final y no se anima nada.
+       3) Los mockups (panel del hero, telefono del bot) se dibujan por JS
+          sobre HTML que ya existe. El HTML trae el estado inicial visible por
+          si el JS no llega a correr.
+       ========================================================================= */
+
+    /* -------------------------------------------------------------------------
+       1. SCROLL REVEAL
+       Los elementos con class="reveal" arrancan invisibles (ver styles.css) y
+       se les agrega .in cuando aparecen. unobserve() despues de la primera vez:
+       la animacion es de entrada, no se repite al volver a subir.
+    ------------------------------------------------------------------------- */
     const revealEls = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -1854,7 +800,11 @@
     }, { threshold: 0.1 });
     revealEls.forEach(el => io.observe(el));
 
-    /* ---------- Nav shadow on scroll ---------- */
+    /* -------------------------------------------------------------------------
+       2. SOMBRA DE LA BARRA AL SCROLLEAR
+       Despega visualmente la barra del contenido apenas se scrollea.
+       passive: true para no bloquear el scroll.
+    ------------------------------------------------------------------------- */
     const nav = document.querySelector('.nav');
     window.addEventListener('scroll', () => {
       nav.style.boxShadow = window.scrollY > 10
@@ -1862,10 +812,20 @@
         : 'none';
     }, { passive: true });
 
-    /* ---------- Smooth anchor offset (sticky nav) ---------- */
+    /* -------------------------------------------------------------------------
+       3. SCROLL SUAVE CON COMPENSACION DE LA BARRA
+       Sin esto, un link a #seccion deja el titulo tapado por la barra fija.
+       Restamos 70px (alto de la barra + aire).
+
+       EXCEPCION IMPORTANTE: los links que empiezan con #caso- se dejan pasar
+       sin preventDefault. El acordeon de casos escucha 'hashchange', y si acá
+       cancelamos el evento el hash nunca cambia y la fila no se abre.
+    ------------------------------------------------------------------------- */
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
-        const target = document.querySelector(a.getAttribute('href'));
+        const href = a.getAttribute('href');
+        if (/^#caso-/.test(href)) return;
+        const target = document.querySelector(href);
         if (!target) return;
         e.preventDefault();
         const top = target.getBoundingClientRect().top + window.scrollY - 70;
@@ -1873,14 +833,25 @@
       });
     });
 
-    /* ---------- Hero: particle network ---------- */
+    /* -------------------------------------------------------------------------
+       4. FONDO DE PARTICULAS DEL HERO
+       Canvas con puntos que flotan y se unen con lineas cuando quedan cerca.
+       El mouse los repele.
+
+       Para ajustarlo, tocar las constantes de arriba:
+         COLORS ......... colores de los puntos (formato "r,g,b")
+         CONNECT_DIST ... a que distancia en px dos puntos se unen con linea
+         MOUSE_DIST ..... radio de repulsion del cursor
+         N .............. cantidad de particulas. Subirlo cuesta CPU.
+       Se apaga solo si el sistema pide movimiento reducido.
+    ------------------------------------------------------------------------- */
     (function () {
       const hero = document.querySelector('.hero');
       const canvas = hero.querySelector('.hero-circuit');
       const ctx = canvas.getContext('2d');
       let W, H;
       const mouse = { x: -9999, y: -9999, active: false };
-      const COLORS = ['79,110,247', '139,92,246', '34,211,238'];
+      const COLORS = ['10,132,255', '64,156,255', '245,245,247'];
       const CONNECT_DIST = 130;
       const MOUSE_DIST = 160;
       const N = 75;
@@ -1936,7 +907,7 @@
               ctx.beginPath();
               ctx.moveTo(pts[i].x, pts[i].y);
               ctx.lineTo(pts[j].x, pts[j].y);
-              ctx.strokeStyle = `rgba(79,110,247,${a})`;
+              ctx.strokeStyle = `rgba(10, 132, 255,${a})`;
               ctx.lineWidth = 0.8;
               ctx.stroke();
             }
@@ -1950,7 +921,7 @@
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(34,211,238,${a})`;
+            ctx.strokeStyle = `rgba(64,156,255,${a})`;
             ctx.lineWidth = 0.9;
             ctx.stroke();
           }
@@ -1982,8 +953,8 @@
         if (mouse.active) {
           ctx.beginPath();
           ctx.arc(mouse.x, mouse.y, 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(34,211,238,0.85)';
-          ctx.shadowColor = '#22d3ee';
+          ctx.fillStyle = 'rgba(64, 156, 255, 0.85)';
+          ctx.shadowColor = '#0a84ff';
           ctx.shadowBlur = 16;
           ctx.fill();
           ctx.shadowBlur = 0;
@@ -2016,7 +987,13 @@
       render();
     })();
 
-    /* ---------- Active nav link on scroll ---------- */
+    /* -------------------------------------------------------------------------
+       5. LINK ACTIVO EN LA BARRA
+       Subraya el link de la seccion que se esta mirando. El rootMargin
+       '-60px 0px -50% 0px' hace que una seccion cuente como "activa" recien
+       cuando llega a la mitad superior de la pantalla; sin eso el subrayado
+       parpadea entre dos secciones.
+    ------------------------------------------------------------------------- */
     const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
     const sectionIds = [...navAnchors].map(a => a.getAttribute('href').slice(1));
     const navSections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
@@ -2033,7 +1010,12 @@
 
     navSections.forEach(s => navActiveObserver.observe(s));
 
-    /* ---------- Card spotlight ---------- */
+    /* -------------------------------------------------------------------------
+       6. LUZ QUE SIGUE AL MOUSE EN LAS TARJETAS
+       Guarda la posicion del cursor en las variables CSS --mx / --my de cada
+       tarjeta. El degradado radial que las usa esta en styles.css (.service-card).
+       Al salir las manda a -999px para que la luz desaparezca.
+    ------------------------------------------------------------------------- */
     document.querySelectorAll('.service-card').forEach(card => {
       card.addEventListener('mousemove', e => {
         const r = card.getBoundingClientRect();
@@ -2046,8 +1028,282 @@
       });
     });
 
-    /* ---------- Animated counters ---------- */
+
+    /* -------------------------------------------------------------------------
+       7. DEMO DEL BOT (dentro del caso "Perfumeria")
+       Escribe la conversacion mensaje por mensaje, en loop.
+
+       EL GUION ESTA EN LA CONSTANTE SEQ. Cada fila es:
+         [tipo, texto, hora, espera_ms]
+       donde tipo es:
+         'in'  mensaje del cliente (burbuja gris, izquierda)
+         'out' respuesta del bot   (burbuja verde, derecha, con tildes de leido)
+         'typ' indicador de "escribiendo..." — se borra solo al pasar al
+               siguiente paso, no queda en pantalla
+         'sys' chip azul de accion del sistema (ej: "Reserva registrada")
+       espera_ms es cuanto queda visible antes del siguiente paso.
+
+       Para cambiar la conversacion alcanza con editar SEQ. El ultimo item
+       tiene una espera larga a proposito: es la pausa antes de reiniciar.
+
+       Arranca cuando el telefono entra en pantalla y frena cuando sale, asi
+       que mientras la fila del caso esta cerrada no consume nada.
+    ------------------------------------------------------------------------- */
+    (function () {
+      const body = document.getElementById('chatBody');
+      if (!body) return;
+
+      const TICK = '<svg class="tick" viewBox="0 0 18 10"><path d="M1 5.2 4.2 8.5 10.2 1.5"/><path d="M7.6 5.2 10.8 8.5 16.8 1.5"/></svg>';
+      const CAL = '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18M9 16l2 2 4-4"/></svg>';
+
+      /* [tipo, contenido, hora, espera antes del siguiente paso] */
+      const SEQ = [
+        ['in',  'Hola! Tenés Sauvage de 100ml?',                                    '14:32',  900],
+        ['typ', null,                                                               null,    1500],
+        ['out', 'Hola! Sí, nos quedan 3. Sale $89.900. ¿Te lo reservo?',            '14:32', 1600],
+        ['in',  'Dale, gracias',                                                    '14:33',  800],
+        ['typ', null,                                                               null,    1300],
+        ['out', 'Listo, te lo dejo reservado 24 hs. Te espero por el local.',       '14:33',  700],
+        ['sys', 'Reserva registrada · stock actualizado',                           null,    4200]
+      ];
+
+      const day = body.querySelector('.chat-day');
+      let timer = null, step = 0, running = false;
+
+      function clear() {
+        [...body.children].forEach(el => { if (el !== day) el.remove(); });
+      }
+
+      function render(item) {
+        const [type, text, time] = item;
+        const el = document.createElement('div');
+        if (type === 'typ') {
+          el.className = 'typing';
+          el.innerHTML = '<i></i><i></i><i></i>';
+        } else if (type === 'sys') {
+          el.className = 'chat-sys';
+          el.innerHTML = CAL + '<span>' + text + '</span>';
+        } else {
+          el.className = 'msg msg-' + type;
+          el.innerHTML = text + '<time>' + time + (type === 'out' ? '</time>' + TICK : '</time>');
+        }
+        body.appendChild(el);
+        return el;
+      }
+
+      function next() {
+        if (!running) return;
+        if (step >= SEQ.length) {
+          timer = setTimeout(() => { clear(); step = 0; next(); }, 600);
+          return;
+        }
+        const item = SEQ[step];
+        const el = render(item);
+        step++;
+        timer = setTimeout(() => {
+          /* el indicador de escribiendo se reemplaza por el mensaje */
+          if (item[0] === 'typ') el.remove();
+          next();
+        }, item[3]);
+      }
+
+      /* Sin animacion: se muestra la conversacion completa, quieta */
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        SEQ.filter(i => i[0] !== 'typ').forEach(i => {
+          const el = render(i);
+          el.style.animation = 'none';
+        });
+        return;
+      }
+
+      new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting && !running) { running = true; next(); }
+          else if (!e.isIntersecting && running) { running = false; clearTimeout(timer); }
+        });
+      }, { threshold: .25 }).observe(body);
+    })();
+
+
+
+    /* -------------------------------------------------------------------------
+       8. PANEL ANIMADO DEL HERO
+       Simula el sistema de gestion trabajando: cada 3,8s entra un turno nuevo,
+       sube el total de caja y el contador de turnos. Al terminar vuelve al
+       estado inicial y arranca de nuevo.
+
+       DATOS A TOCAR:
+         BASE ....... las filas que se ven al principio
+         EXTRA ...... las filas que van entrando, cada una con su monto
+         montoBase .. el valor inicial de caja ($184.500)
+       Los tres estan hardcodeados a proposito: es un mockup ilustrativo,
+       no datos de un cliente real.
+
+       El panel es NEUTRO (Cliente A / B / C, sin nombrar rubro) para que
+       cualquier dueno de local se vea reflejado. Si le pones "Corte" o
+       "Color", el sitio pasa a leerse como especifico de peluquerias.
+    ------------------------------------------------------------------------- */
+    (function () {
+      const list = document.getElementById('agendaList');
+      const caja = document.getElementById('tileCaja');
+      const turnos = document.getElementById('tileTurnos');
+      if (!list || !caja) return;
+
+      const BASE = [
+        { t: '09:00', n: 'Cliente A', s: 'Atendido', done: true },
+        { t: '10:30', n: 'Cliente B', s: 'Atendido', done: true },
+        { t: '15:00', n: 'Cliente C', s: 'Confirmado', done: false }
+      ];
+      const EXTRA = [
+        { t: '16:30', n: 'Cliente D', s: 'Nuevo', done: false, monto: 12500 },
+        { t: '18:00', n: 'Cliente E', s: 'Nuevo', done: false, monto: 9800 }
+      ];
+
+      const ars = n => '$' + n.toLocaleString('es-AR');
+      let montoBase = 184500, i = 0, timer = null, alive = false;
+
+      function paint(items, marcarUltima) {
+        list.innerHTML = '';
+        items.forEach((it, idx) => {
+          const li = document.createElement('li');
+          li.className = 'ag-row' + (it.done ? ' is-done' : '') +
+            (marcarUltima && idx === items.length - 1 ? ' is-new' : '');
+          li.innerHTML =
+            '<span class="ag-time">' + it.t + '</span>' +
+            '<span class="ag-name">' + it.n + '</span>' +
+            '<span class="ag-state' + (it.done ? ' ag-ok' : '') + '">' + it.s + '</span>';
+          list.appendChild(li);
+        });
+      }
+
+      function bump(el, valor) {
+        el.textContent = valor;
+        el.classList.add('is-bump');
+        setTimeout(() => el.classList.remove('is-bump'), 900);
+      }
+
+      function tick() {
+        if (!alive) return;
+        if (i < EXTRA.length) {
+          const items = BASE.concat(EXTRA.slice(0, i + 1));
+          paint(items, true);
+          montoBase += EXTRA[i].monto;
+          bump(caja, ars(montoBase));
+          bump(turnos, String(items.length));
+          i++;
+        } else {
+          /* vuelve al estado inicial y arranca de nuevo */
+          i = 0;
+          montoBase = 184500;
+          paint(BASE, false);
+          caja.textContent = ars(montoBase);
+          turnos.textContent = String(BASE.length);
+        }
+        timer = setTimeout(tick, 3800);
+      }
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting && !alive) {
+            alive = true;
+            timer = setTimeout(tick, 2600);
+          } else if (!e.isIntersecting && alive) {
+            alive = false;
+            clearTimeout(timer);
+          }
+        });
+      }, { threshold: .3 }).observe(list);
+    })();
+
+    /* -------------------------------------------------------------------------
+       9. ACORDEON DE CASOS
+       Una sola fila abierta por vez.
+
+       CARGA DIFERIDA DEL MEDIA: los <video>/<img> de cada caso se escriben con
+       data-src en vez de src. Este bloque lo pasa a src recien cuando la fila
+       se abre, asi entrar a la pagina no descarga cinco videos. Si pones src
+       directo en el HTML, perdes esa optimizacion.
+
+       El despliegue usa grid-template-rows de 0fr a 1fr (ver styles.css). Es
+       la unica forma de animar "de 0 a la altura que le toque" sin saber esa
+       altura de antemano ni tener que medirla por JS.
+
+       LINKS DIRECTOS: entrar con #caso-perfumeria en la URL abre esa fila.
+       Escucha 'hashchange' ademas del load porque hacer click en un link
+       interno NO recarga la pagina — sin ese listener, los links del hero a un
+       caso no abrian nada.
+    ------------------------------------------------------------------------- */
+    (function () {
+      const rows = document.querySelectorAll('.case-row');
+      if (!rows.length) return;
+
+      const heads = [...rows].map(r => r.querySelector('.case-head'));
+
+      function close(head) {
+        head.setAttribute('aria-expanded', 'false');
+        document.getElementById(head.getAttribute('aria-controls')).classList.remove('is-open');
+      }
+
+      function open(head) {
+        head.setAttribute('aria-expanded', 'true');
+        const panel = document.getElementById(head.getAttribute('aria-controls'));
+        panel.classList.add('is-open');
+
+        /* carga diferida: el src real vive en data-src hasta que se abre */
+        panel.querySelectorAll('video[data-src], img[data-src]').forEach(m => {
+          m.src = m.dataset.src;
+          delete m.dataset.src;
+          if (m.tagName === 'VIDEO') m.play().catch(() => {});
+        });
+      }
+
+      heads.forEach(head => {
+        head.addEventListener('click', () => {
+          const wasOpen = head.getAttribute('aria-expanded') === 'true';
+          heads.forEach(h => {
+            close(h);
+            /* al cerrar, pausamos el video para no gastar bateria */
+            document.getElementById(h.getAttribute('aria-controls'))
+              .querySelectorAll('video').forEach(v => v.pause());
+          });
+          if (!wasOpen) open(head);
+        });
+      });
+
+      /* Abrir la fila que apunte el hash, tanto al cargar como al
+         clickear un link interno (eso no recarga la pagina) */
+      function openFromHash() {
+        const hash = location.hash;
+        if (!hash || !/^#caso-[\w-]+$/.test(hash)) return;
+        const row = document.querySelector(hash);
+        if (!row) return;
+        const head = row.querySelector('.case-head');
+        if (!head) return;
+        heads.forEach(close);
+        open(head);
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      openFromHash();
+      window.addEventListener('hashchange', openFromHash);
+    })();
+
+    /* -------------------------------------------------------------------------
+       10. CONTADORES ANIMADOS
+       Los numeros de la tira del hero cuentan desde 0 hasta su valor cuando
+       aparecen en pantalla. El valor final vive en el HTML (no aca): countUp lo
+       lee del texto del elemento. Si cambias "−80%" en el HTML, actualiza
+       tambien la condicion de abajo.
+
+       El delay de 720ms sincroniza el conteo con la entrada de la tira, que en
+       styles.css tiene animation-delay: .72s. Si cambias uno, cambia el otro.
+    ------------------------------------------------------------------------- */
+    const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     function countUp(el, end, duration, formatter) {
+      if (REDUCED) { el.innerHTML = formatter(end); return; }
       el.classList.add('counting');
       const t0 = performance.now();
       (function raf(now) {
@@ -2063,25 +1319,15 @@
       new IntersectionObserver(([e], obs) => {
         if (!e.isIntersecting) return;
         obs.disconnect();
-        document.querySelectorAll('.hero-stat strong').forEach(el => {
-          const raw = el.textContent.trim();
-          if (raw === '−80%') countUp(el, 80, 1100, n => `−${n}%`);
-          else if (raw === '100%') countUp(el, 100, 1300, n => `${n}%`);
-        });
+        /* sincronizado con la entrada del strip (delay .72s) */
+        setTimeout(() => {
+          document.querySelectorAll('.hero-stat strong').forEach(el => {
+            const raw = el.textContent.trim();
+            if (raw === '−80%') countUp(el, 80, 1100, n => `−${n}%`);
+            else if (raw === '100%') countUp(el, 100, 1300, n => `${n}%`);
+          });
+        }, 720);
       }, { threshold: 0.6 }).observe(heroStrip);
-    }
-
-    const caseMetrics = document.querySelector('.case-metrics');
-    if (caseMetrics) {
-      new IntersectionObserver(([e], obs) => {
-        if (!e.isIntersecting) return;
-        obs.disconnect();
-        caseMetrics.querySelectorAll('.metric-item strong').forEach(el => {
-          const raw = el.textContent.replace(/\s/g, '');
-          if (raw.includes('80')) countUp(el, 80, 1100, n => `<span>−</span>${n}%`);
-          else if (raw === '100%') countUp(el, 100, 1300, n => `${n}%`);
-        });
-      }, { threshold: 0.6 }).observe(caseMetrics);
     }
   </script>
 </body>
