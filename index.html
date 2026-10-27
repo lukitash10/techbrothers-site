@@ -75,7 +75,8 @@
     Ejemplos reales ya cargados: caso-estudio (assets/estudio.mp4),
     caso-gts (assets/gts.mp4) y caso-energies (assets/energies.mp4), cada
     uno con su poster .jpg sacado del propio video con ffmpeg. Los dos usan la variante ancha
-    (case-panel-inner--wide) y el boton de pantalla completa.
+    (case-panel-inner--wide), el boton "Ver en grande" que abre el visor
+    #vbox y data-peek en el .case-row para la miniatura flotante.
 
     Usa data-src y NO src. El JS del acordeon pasa data-src a src recien
     cuando se abre la fila: asi el video no se descarga al entrar a la pagina.
@@ -305,8 +306,8 @@
       <div class="eyebrow">Casos</div>
       <h2 class="section-title">Lo que ya construimos</h2>
       <p class="section-sub cases-intro">
-        Cinco proyectos entregados. Los dos sitios se pueden visitar; de los
-        sistemas mostramos el producto andando.
+        Cinco proyectos entregados. Abrí cualquiera para ver qué hicimos; los que
+        dicen <span class="cases-intro-video">Video</span> muestran el recorrido completo.
       </p>
 
       <div class="cases">
@@ -353,12 +354,13 @@
             </div>
           </div>
         </div>
-        <div class="case-row" id="caso-estudio">
+        <div class="case-row" id="caso-estudio" data-peek="assets/estudio.jpg">
           <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-estudio-panel">
             <span class="case-client">Estudio jurídico</span>
             <span class="case-tag">Sistema</span>
             <span class="case-year">2026</span>
             <span class="case-resumen">Gestión de expedientes y clientes</span>
+            <span class="case-video-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>Video <span class="case-video-dur">1:27</span></span>
             <span class="case-plus" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
             </span>
@@ -389,9 +391,9 @@
             <div class="case-video">
               <video data-src="assets/estudio.mp4" poster="assets/estudio.jpg"
                      muted loop playsinline preload="none"></video>
-              <button class="case-video-full" type="button" aria-label="Ver el video en pantalla completa">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-                <span>Pantalla completa</span>
+              <button class="case-video-open" type="button" aria-label="Ver el video en grande">
+                <span class="case-video-open-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+                <span class="case-video-open-txt">Ver en grande</span>
               </button>
             </div>
           </figure>
@@ -400,12 +402,13 @@
         </div>
         <h3 class="cases-group">Sitios institucionales</h3>
 
-        <div class="case-row" id="caso-gts">
+        <div class="case-row" id="caso-gts" data-peek="assets/gts.jpg">
           <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-gts-panel">
             <span class="case-client">Global Tech Secure</span>
             <span class="case-tag">Sitio</span>
             <span class="case-year">2026</span>
             <span class="case-resumen">Distribuidora de seguridad con más de 30 años</span>
+            <span class="case-video-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>Video <span class="case-video-dur">0:40</span></span>
             <span class="case-plus" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
             </span>
@@ -440,21 +443,22 @@
             <div class="case-video">
               <video data-src="assets/gts.mp4" poster="assets/gts.jpg"
                      muted loop playsinline preload="none"></video>
-              <button class="case-video-full" type="button" aria-label="Ver el video en pantalla completa">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-                <span>Pantalla completa</span>
+              <button class="case-video-open" type="button" aria-label="Ver el video en grande">
+                <span class="case-video-open-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+                <span class="case-video-open-txt">Ver en grande</span>
               </button>
             </div>
           </figure>
             </div>
           </div>
         </div>
-        <div class="case-row" id="caso-energies">
+        <div class="case-row" id="caso-energies" data-peek="assets/energies.jpg">
           <button class="case-head" type="button" aria-expanded="false" aria-controls="caso-energies-panel">
             <span class="case-client">Global Tech Energies</span>
             <span class="case-tag">Sitio</span>
             <span class="case-year">2026</span>
             <span class="case-resumen">Films de enfriamiento radiativo para industria</span>
+            <span class="case-video-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>Video <span class="case-video-dur">0:40</span></span>
             <span class="case-plus" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
             </span>
@@ -490,9 +494,9 @@
             <div class="case-video">
               <video data-src="assets/energies.mp4" poster="assets/energies.jpg"
                      muted loop playsinline preload="none"></video>
-              <button class="case-video-full" type="button" aria-label="Ver el video en pantalla completa">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-                <span>Pantalla completa</span>
+              <button class="case-video-open" type="button" aria-label="Ver el video en grande">
+                <span class="case-video-open-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+                <span class="case-video-open-txt">Ver en grande</span>
               </button>
             </div>
           </figure>
@@ -816,6 +820,37 @@
        "Hablar ahora" de la barra ya es sticky y cumple la misma funcion sin
        tapar contenido. Los estilos siguen en styles.css (seccion BURBUJA
        FLOTANTE) por si se quiere volver atras. -->
+
+
+  <!-- =========================================================================
+       VISOR DE VIDEO (lightbox)
+       Lo abre el boton "Ver en grande" o un click sobre el video de un caso
+       (ver bloque 9b del JS). Usa el mismo archivo que el video del caso:
+       no hay que cargar nada aparte. Se cierra con la X, con Esc o tocando
+       afuera.
+       ========================================================================= -->
+  <div class="vbox" id="vbox" hidden>
+    <div class="vbox-backdrop" data-vbox-close></div>
+    <div class="vbox-panel" role="dialog" aria-modal="true" aria-labelledby="vboxTitle">
+      <div class="vbox-head">
+        <div class="vbox-title">
+          <span class="vbox-kicker" id="vboxKicker"></span>
+          <strong id="vboxTitle"></strong>
+        </div>
+        <button class="vbox-close" type="button" data-vbox-close aria-label="Cerrar video">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="vbox-stage">
+        <video id="vboxVideo" controls playsinline preload="none"></video>
+      </div>
+    </div>
+  </div>
+
+  <!-- Miniatura que sigue al cursor sobre las filas con video (bloque 9c del JS) -->
+  <div class="case-peek" id="casePeek" aria-hidden="true">
+    <span class="case-peek-play"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+  </div>
 
   <script>
     /* =========================================================================
@@ -1357,38 +1392,105 @@
     })();
 
     /* -------------------------------------------------------------------------
-       9b. VIDEO DE CASO EN PANTALLA COMPLETA
-       Un video de sistema grabado en 1920px se ve chico dentro de la pagina:
-       la interfaz no se llega a leer. El boton .case-video-full (o un click
-       sobre el video) lo abre en pantalla completa, desde el principio y con
-       controles para pausar/adelantar. Al salir, los controles se van y el
-       video sigue en loop mudo como antes.
+       9b. VISOR DE VIDEO
+       Un video grabado en 1920px se ve chico dentro del caso. "Ver en grande"
+       (o un click sobre el video) lo abre en el visor #vbox: grande, desde el
+       principio y con controles. Mientras esta abierto, el video del caso se
+       pausa y la pagina no scrollea; al cerrar todo vuelve como estaba.
        Para sumarlo a otro caso: envolver el <video> en .case-video y copiar
-       el boton (ver caso-estudio).
+       el boton .case-video-open (ver caso-estudio).
     ------------------------------------------------------------------------- */
     (function () {
-      function goFull(video) {
-        video.controls = true;
-        video.currentTime = 0;
-        video.play().catch(() => {});
-        if (video.requestFullscreen) video.requestFullscreen().catch(() => {});
-        else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen(); /* iPhone */
+      const box = document.getElementById('vbox');
+      if (!box) return;
+      const vid = document.getElementById('vboxVideo');
+      const title = document.getElementById('vboxTitle');
+      const kicker = document.getElementById('vboxKicker');
+      let source = null, lastFocus = null, closeTimer = 0;
+
+      function open(inline) {
+        const row = inline.closest('.case-row');
+        title.textContent = row ? row.querySelector('.case-client').textContent : '';
+        kicker.textContent = row ? row.querySelector('.case-tag').textContent : '';
+        const src = inline.getAttribute('src') || inline.dataset.src;
+        if (vid.getAttribute('src') !== src) vid.src = src;
+        vid.poster = inline.poster;
+        source = inline;
+        inline.pause();
+        lastFocus = document.activeElement;
+        clearTimeout(closeTimer);
+        box.hidden = false;
+        document.documentElement.classList.add('vbox-lock');
+        requestAnimationFrame(() => box.classList.add('is-open'));
+        vid.currentTime = 0;
+        vid.play().catch(() => {});
+        box.querySelector('.vbox-close').focus({ preventScroll: true });
+      }
+
+      function close() {
+        if (box.hidden) return;
+        box.classList.remove('is-open');
+        vid.pause();
+        document.documentElement.classList.remove('vbox-lock');
+        closeTimer = setTimeout(() => { box.hidden = true; }, 320);
+        if (source) source.play().catch(() => {});
+        if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
 
       document.querySelectorAll('.case-video').forEach(wrap => {
-        const video = wrap.querySelector('video');
-        const btn = wrap.querySelector('.case-video-full');
-        if (!video || !btn) return;
-        btn.addEventListener('click', () => goFull(video));
-        video.addEventListener('click', () => {
-          if (!document.fullscreenElement) goFull(video);
-        });
-        video.addEventListener('webkitendfullscreen', () => { video.controls = false; });
+        const inline = wrap.querySelector('video');
+        if (!inline) return;
+        wrap.querySelector('.case-video-open')?.addEventListener('click', () => open(inline));
+        inline.addEventListener('click', () => open(inline));
       });
+      box.querySelectorAll('[data-vbox-close]').forEach(el => el.addEventListener('click', close));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    })();
 
-      document.addEventListener('fullscreenchange', () => {
-        if (document.fullscreenElement) return;
-        document.querySelectorAll('.case-video video').forEach(v => { v.controls = false; });
+    /* -------------------------------------------------------------------------
+       9c. MINIATURA FLOTANTE EN LAS FILAS CON VIDEO
+       En computadora, al pasar el mouse por una fila cerrada que tiene
+       data-peek="poster.jpg", aparece una miniatura que sigue al cursor:
+       avisa que adentro hay un video antes de abrirlo. Solo con mouse real
+       (hover: hover), nunca en celular, y no con movimiento reducido.
+    ------------------------------------------------------------------------- */
+    (function () {
+      const peek = document.getElementById('casePeek');
+      if (!peek || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let x = 0, y = 0, tx = 0, ty = 0, raf = 0, active = null;
+
+      function loop() {
+        x += (tx - x) * (reduced ? 1 : .18);
+        y += (ty - y) * (reduced ? 1 : .18);
+        const tilt = reduced ? 0 : Math.max(-8, Math.min(8, (tx - x) * .12));
+        peek.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${tilt}deg)`;
+        raf = active ? requestAnimationFrame(loop) : 0;
+      }
+      function place(e) {
+        tx = e.clientX + 28;
+        ty = e.clientY - 150;
+        if (tx + 260 > innerWidth - 12) tx = e.clientX - 288;
+        if (ty < 70) ty = e.clientY + 24;
+      }
+
+      document.querySelectorAll('.case-row[data-peek]').forEach(row => {
+        const head = row.querySelector('.case-head');
+        head.addEventListener('mouseenter', e => {
+          if (head.getAttribute('aria-expanded') === 'true') return;
+          peek.style.backgroundImage = `url("${row.dataset.peek}")`;
+          active = row; place(e); x = tx; y = ty + 14;
+          peek.classList.add('is-on');
+          if (!raf) raf = requestAnimationFrame(loop);
+        });
+        head.addEventListener('mousemove', e => {
+          if (active !== row) return;
+          if (head.getAttribute('aria-expanded') === 'true') { peek.classList.remove('is-on'); return; }
+          place(e);
+        });
+        const hide = () => { if (active === row) { active = null; peek.classList.remove('is-on'); } };
+        head.addEventListener('mouseleave', hide);
+        head.addEventListener('click', hide);
       });
     })();
 
