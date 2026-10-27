@@ -1837,9 +1837,19 @@ body::before {
   gap: 2rem;
 }
 
+/* El video/captura real (no el placeholder ni el telefono) va primero y
+   se lleva la mayor parte del ancho: es la prueba, tiene que ser lo
+   primero que se ve al abrir el caso. El telefono del caso-perfumeria ya
+   es vistoso de por si (max-width propio), asi que queda afuera de esto. */
+.case-media:not(.case-media--phone) {
+  order: -1;
+}
+
 @media (min-width: 860px) {
   .case-panel-inner {
-    grid-template-columns: 1.15fr .85fr;
+    /* orden visual: media (order -1) cae en la 1ra columna, por eso es
+       la mas ancha de las dos */
+    grid-template-columns: 1.28fr .82fr;
     gap: 3rem;
   }
 }
@@ -1957,8 +1967,91 @@ body::before {
 .case-media img {
   width: 100%;
   border-radius: var(--r-md);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(64, 156, 255, .22);
   display: block;
+  /* halo celeste + sombra elevada: es la pieza que tiene que llamar la
+     atencion apenas se abre el caso, no un recuadro mas */
+  box-shadow:
+    0 0 0 1px rgba(10, 132, 255, .06),
+    0 40px 70px -28px rgba(0, 0, 0, .6),
+    0 0 48px -12px rgba(10, 132, 255, .28);
+}
+
+/* --- Variante ancha: el video ocupa todo el ancho del panel ---
+   Para casos con video de sistema (caso-estudio). Al costado del texto el
+   video quedaba en ~640px y la interfaz grabada no se leia. Aca va arriba
+   a todo el ancho y el texto abajo, en tres columnas en desktop. */
+.case-panel-inner.case-panel-inner--wide {
+  grid-template-columns: 1fr;
+  gap: 2.25rem;
+}
+
+.case-panel-inner--wide .case-media {
+  padding: .5rem 0 0;
+}
+
+@media (min-width: 860px) {
+  .case-panel-inner--wide .case-text {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 2.5rem;
+  }
+
+  /* metricas, stack y avisos pendientes cruzan las tres columnas */
+  .case-panel-inner--wide .case-text > :not(.case-block) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* --- Video con boton de pantalla completa --- */
+.case-video {
+  position: relative;
+}
+
+.case-video video {
+  cursor: zoom-in;
+}
+
+.case-video-full {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: .5rem .9rem;
+  font-family: var(--f-body);
+  font-size: .76rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0, 0, 0, .6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background .25s, border-color .25s;
+}
+
+.case-video-full:hover,
+.case-video-full:focus-visible {
+  background: var(--neon-fill);   /* --neon-fill y no --neon: contraste AA con texto blanco */
+  border-color: var(--neon-fill);
+}
+
+.case-video-full:focus-visible {
+  outline: 2px solid var(--neon-mid);
+  outline-offset: 3px;
+}
+
+.case-video-full svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .case-media-slot {
@@ -1994,6 +2087,18 @@ body::before {
   inset: 0;
   background:
     radial-gradient(ellipse 55% 80% at 50% 120%, rgba(10, 132, 255, .16) 0%, transparent 70%);
+}
+
+/* Particulas de la franja (mismo JS que el hero, mas suave: ver bloque 4
+   del JS). La mascara las desvanece hacia los bordes para que el efecto
+   se concentre en el centro y no "corte" contra el footer. */
+.cta-circuit {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 30%, transparent 100%);
 }
 
 .cta-band-grid {

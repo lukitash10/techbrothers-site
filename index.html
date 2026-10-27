@@ -72,6 +72,11 @@
                muted loop playsinline preload="none"></video>
       </figure>
 
+    Ejemplos reales ya cargados: caso-estudio (assets/estudio.mp4),
+    caso-gts (assets/gts.mp4) y caso-energies (assets/energies.mp4), cada
+    uno con su poster .jpg sacado del propio video con ffmpeg. Los dos usan la variante ancha
+    (case-panel-inner--wide) y el boton de pantalla completa.
+
     Usa data-src y NO src. El JS del acordeon pasa data-src a src recien
     cuando se abre la fila: asi el video no se descarga al entrar a la pagina.
     Para una imagen es igual: <img data-src="..." alt="...">.
@@ -91,7 +96,7 @@
       .case-row .case-head ......... acordeon de casos
       .hero-strip .hero-stat ....... contadores que animan al aparecer
       .reveal ...................... elementos que entran al hacer scroll
-      .hero-circuit ................ canvas de particulas del fondo
+      .hero-circuit .cta-circuit ... canvas de particulas (hero y franja final)
 
   ACCESIBILIDAD
   -------------
@@ -162,7 +167,7 @@
   <section class="hero">
     <div class="hero-mesh"></div>
     <div class="hero-grid"></div>
-    <canvas class="hero-circuit"></canvas>
+    <canvas class="hero-circuit" aria-hidden="true"></canvas>
 
     <div class="wrap hero-wrap">
       <div class="hero-layout">
@@ -359,30 +364,35 @@
             </span>
           </button>
           <div class="case-panel" id="caso-estudio-panel" role="region">
-            <div class="case-panel-inner">
+            <div class="case-panel-inner case-panel-inner--wide">
               <div class="case-text">
                 <div class="case-block">
                   <h4>El problema</h4>
-                  <p>COMPLETAR: cómo llevaban los expedientes antes (carpetas físicas, Excel, vencimientos que se pasaban).</p>
+                  <p>COMPLETAR: cómo llevaban los expedientes antes del sistema.</p>
                 </div>
                 <div class="case-block">
                   <h4>Lo que hicimos</h4>
-                  <p>COMPLETAR: qué módulos tiene el sistema (expedientes, clientes, vencimientos, documentos, honorarios).</p>
+                  <p>LexSaaS: un sistema propio para el estudio. Cada expediente se carga con su número, carátula, fecha, jurisdicción, fuero y juzgado, y desde ahí se maneja todo: archivos, contactos y partes del caso, relatos de los hechos con historial de versiones (cada cambio queda guardado, nunca se pisa), agenda, búsqueda global y auditoría de quién tocó qué.</p>
                 </div>
                 <div class="case-block">
                   <h4>El resultado</h4>
                   <p>COMPLETAR: qué cambió para el estudio, idealmente con un número.</p>
                 </div>
-                
+
                 <div class="case-foot">
                   <span class="case-stack">COMPLETAR: stack</span>
                 </div>
-                <p class="case-pending">PENDIENTE: me falta la historia de este caso. Sin chatbot conectado — no mencionar WhatsApp acá.</p>
+                <p class="case-pending">PENDIENTE: ya tengo el video y el "lo que hicimos". Me falta el problema de antes, el resultado y el stack. Sin chatbot conectado — no mencionar WhatsApp acá.</p>
               </div>
-              
-          <figure class="case-media" data-media-pending>
-            <div class="case-media-slot">
-              <span>Video del sistema andando</span>
+
+          <figure class="case-media">
+            <div class="case-video">
+              <video data-src="assets/estudio.mp4" poster="assets/estudio.jpg"
+                     muted loop playsinline preload="none"></video>
+              <button class="case-video-full" type="button" aria-label="Ver el video en pantalla completa">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                <span>Pantalla completa</span>
+              </button>
             </div>
           </figure>
             </div>
@@ -401,7 +411,7 @@
             </span>
           </button>
           <div class="case-panel" id="caso-gts-panel" role="region">
-            <div class="case-panel-inner">
+            <div class="case-panel-inner case-panel-inner--wide">
               <div class="case-text">
                 <div class="case-block">
                   <h4>El problema</h4>
@@ -418,13 +428,22 @@
                 
                 <div class="case-foot">
                   <span class="case-stack">HTML · CSS · JavaScript · PHP</span>
+            <a class="case-ext" href="https://globaltechsec.netlify.app/" target="_blank" rel="noopener noreferrer"
+               onclick="event.stopPropagation()">
+              Visitar
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>
+            </a>
                 </div>
-                <p class="case-pending">PENDIENTE: pasame la URL pública para poder linkearlo.</p>
               </div>
               
-          <figure class="case-media" data-media-pending>
-            <div class="case-media-slot">
-              <span>Captura del sitio</span>
+          <figure class="case-media">
+            <div class="case-video">
+              <video data-src="assets/gts.mp4" poster="assets/gts.jpg"
+                     muted loop playsinline preload="none"></video>
+              <button class="case-video-full" type="button" aria-label="Ver el video en pantalla completa">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                <span>Pantalla completa</span>
+              </button>
             </div>
           </figure>
             </div>
@@ -441,7 +460,7 @@
             </span>
           </button>
           <div class="case-panel" id="caso-energies-panel" role="region">
-            <div class="case-panel-inner">
+            <div class="case-panel-inner case-panel-inner--wide">
               <div class="case-text">
                 <div class="case-block">
                   <h4>El problema</h4>
@@ -467,9 +486,14 @@
                 
               </div>
               
-          <figure class="case-media" data-media-pending>
-            <div class="case-media-slot">
-              <span>Captura del sitio</span>
+          <figure class="case-media">
+            <div class="case-video">
+              <video data-src="assets/energies.mp4" poster="assets/energies.jpg"
+                     muted loop playsinline preload="none"></video>
+              <button class="case-video-full" type="button" aria-label="Ver el video en pantalla completa">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                <span>Pantalla completa</span>
+              </button>
             </div>
           </figure>
             </div>
@@ -759,6 +783,7 @@
        sobre el panel oscuro.
        ========================================================================= -->
   <section class="cta-band" id="contacto">
+    <canvas class="cta-circuit" aria-hidden="true"></canvas>
     <div class="cta-band-grid"></div>
     <div class="cta-band-inner reveal">
       <div class="cta-band-label">¿Arrancamos?</div>
@@ -864,34 +889,39 @@
     });
 
     /* -------------------------------------------------------------------------
-       4. FONDO DE PARTICULAS DEL HERO
+       4. FONDO DE PARTICULAS (hero + franja de contacto)
        Canvas con puntos que flotan y se unen con lineas cuando quedan cerca.
-       El mouse los repele.
+       El mouse los repele. Se usa dos veces, como "marco" de la pagina: fuerte
+       en el hero y mas suave en la franja final (.cta-band). El medio de la
+       pagina queda quieto a proposito, para que se pueda leer.
 
-       Para ajustarlo, tocar las constantes de arriba:
-         COLORS ......... colores de los puntos (formato "r,g,b")
-         CONNECT_DIST ... a que distancia en px dos puntos se unen con linea
-         MOUSE_DIST ..... radio de repulsion del cursor
-         N .............. cantidad de particulas. Subirlo cuesta CPU.
-       Se apaga solo si el sistema pide movimiento reducido.
+       particleField(seccion, canvas, opciones) arma uno. Opciones:
+         n ............ cantidad de particulas. Subirlo cuesta CPU.
+         connect ...... a que distancia en px dos puntos se unen con linea
+         mouseDist .... radio de repulsion del cursor
+         alpha ........ multiplica la opacidad de todo (1 = como el hero)
+         speed ........ multiplica la velocidad de los puntos
+
+       RENDIMIENTO: cada canvas anima SOLO mientras su seccion esta en
+       pantalla (IntersectionObserver). Fuera de pantalla no gasta nada.
+       MOVIMIENTO REDUCIDO: si el sistema lo pide, dibuja un cuadro quieto y
+       no anima.
     ------------------------------------------------------------------------- */
-    (function () {
-      const hero = document.querySelector('.hero');
-      const canvas = hero.querySelector('.hero-circuit');
+    function particleField(section, canvas, opts) {
+      if (!section || !canvas) return;
+      const o = Object.assign({ n: 75, connect: 130, mouseDist: 160, alpha: 1, speed: 1 }, opts);
       const ctx = canvas.getContext('2d');
-      let W, H;
-      const mouse = { x: -9999, y: -9999, active: false };
       const COLORS = ['10,132,255', '64,156,255', '245,245,247'];
-      const CONNECT_DIST = 130;
-      const MOUSE_DIST = 160;
-      const N = 75;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const mouse = { x: -9999, y: -9999, active: false };
       const pts = [];
+      let W = 0, H = 0, running = false, raf = 0;
 
       function Particle() {
         this.x = Math.random() * W;
         this.y = Math.random() * H;
-        this.vx = (Math.random() - 0.5) * 0.45;
-        this.vy = (Math.random() - 0.5) * 0.45;
+        this.vx = (Math.random() - 0.5) * 0.45 * o.speed;
+        this.vy = (Math.random() - 0.5) * 0.45 * o.speed;
         this.r = 1.5 + Math.random() * 1.5;
         this.col = COLORS[Math.floor(Math.random() * COLORS.length)];
         this.a = 0.25 + Math.random() * 0.35;
@@ -899,13 +929,14 @@
 
       function init() {
         pts.length = 0;
-        for (let i = 0; i < N; i++) pts.push(new Particle());
+        for (let i = 0; i < o.n; i++) pts.push(new Particle());
       }
 
-      function render() {
+      function draw() {
         ctx.clearRect(0, 0, W, H);
+        const N = pts.length, A = o.alpha, MD = o.mouseDist, CD = o.connect;
 
-        /* Update positions */
+        /* mover + repulsion del mouse */
         for (let i = 0; i < N; i++) {
           const p = pts[i];
           p.x += p.vx;
@@ -914,63 +945,46 @@
           if (p.x > W) p.x = 0;
           if (p.y < 0) p.y = H;
           if (p.y > H) p.y = 0;
-
-          /* Mouse repulsion */
-          const mdx = p.x - mouse.x;
-          const mdy = p.y - mouse.y;
+          const mdx = p.x - mouse.x, mdy = p.y - mouse.y;
           const md = Math.hypot(mdx, mdy);
-          if (md < MOUSE_DIST && md > 0) {
-            const f = ((MOUSE_DIST - md) / MOUSE_DIST) * 0.9;
+          if (md < MD && md > 0) {
+            const f = ((MD - md) / MD) * 0.9;
             p.x += (mdx / md) * f;
             p.y += (mdy / md) * f;
           }
         }
 
-        /* Draw connections */
+        /* lineas entre puntos cercanos y hacia el cursor */
         for (let i = 0; i < N; i++) {
           for (let j = i + 1; j < N; j++) {
-            const dx = pts[i].x - pts[j].x;
-            const dy = pts[i].y - pts[j].y;
-            const d = Math.hypot(dx, dy);
-            if (d < CONNECT_DIST) {
-              const a = (1 - d / CONNECT_DIST) * 0.22;
+            const d = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y);
+            if (d < CD) {
               ctx.beginPath();
               ctx.moveTo(pts[i].x, pts[i].y);
               ctx.lineTo(pts[j].x, pts[j].y);
-              ctx.strokeStyle = `rgba(10, 132, 255,${a})`;
+              ctx.strokeStyle = `rgba(10,132,255,${(1 - d / CD) * 0.22 * A})`;
               ctx.lineWidth = 0.8;
               ctx.stroke();
             }
           }
-          /* Mouse connections */
-          const mdx = pts[i].x - mouse.x;
-          const mdy = pts[i].y - mouse.y;
-          const md = Math.hypot(mdx, mdy);
-          if (md < MOUSE_DIST) {
-            const a = (1 - md / MOUSE_DIST) * 0.55;
+          const md = Math.hypot(pts[i].x - mouse.x, pts[i].y - mouse.y);
+          if (md < MD) {
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(64,156,255,${a})`;
+            ctx.strokeStyle = `rgba(64,156,255,${(1 - md / MD) * 0.55 * A})`;
             ctx.lineWidth = 0.9;
             ctx.stroke();
           }
         }
 
-        /* Draw particles */
+        /* puntos (crecen y brillan cerca del cursor) */
         for (let i = 0; i < N; i++) {
           const p = pts[i];
-          const mdx = p.x - mouse.x;
-          const mdy = p.y - mouse.y;
-          const md = Math.hypot(mdx, mdy);
-          const t = Math.max(0, 1 - md / MOUSE_DIST);
-          const r = p.r + t * 3.5;
-          const a = p.a + t * 0.55;
-
+          const t = Math.max(0, 1 - Math.hypot(p.x - mouse.x, p.y - mouse.y) / MD);
           ctx.beginPath();
-          ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${p.col},${a})`;
-
+          ctx.arc(p.x, p.y, p.r + t * 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${p.col},${(p.a + t * 0.55) * A})`;
           if (t > 0.1) {
             ctx.shadowColor = `rgba(${p.col},0.9)`;
             ctx.shadowBlur = 6 + t * 18;
@@ -979,34 +993,38 @@
           ctx.shadowBlur = 0;
         }
 
-        /* Cursor dot */
+        /* punto del cursor */
         if (mouse.active) {
           ctx.beginPath();
           ctx.arc(mouse.x, mouse.y, 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(64, 156, 255, 0.85)';
+          ctx.fillStyle = `rgba(64,156,255,${0.85 * Math.min(1, A + 0.3)})`;
           ctx.shadowColor = '#0a84ff';
           ctx.shadowBlur = 16;
           ctx.fill();
           ctx.shadowBlur = 0;
         }
+      }
 
-        requestAnimationFrame(render);
+      function loop() {
+        if (!running) return;
+        draw();
+        raf = requestAnimationFrame(loop);
       }
 
       function resize() {
-        W = canvas.width = hero.offsetWidth;
-        H = canvas.height = hero.offsetHeight;
+        W = canvas.width = section.offsetWidth;
+        H = canvas.height = section.offsetHeight;
         init();
+        if (reduced) draw();
       }
 
-      hero.addEventListener('mousemove', e => {
-        const r = hero.getBoundingClientRect();
+      section.addEventListener('mousemove', e => {
+        const r = section.getBoundingClientRect();
         mouse.x = e.clientX - r.left;
         mouse.y = e.clientY - r.top;
         mouse.active = true;
       });
-
-      hero.addEventListener('mouseleave', () => {
+      section.addEventListener('mouseleave', () => {
         mouse.x = -9999;
         mouse.y = -9999;
         mouse.active = false;
@@ -1014,8 +1032,26 @@
 
       window.addEventListener('resize', resize);
       resize();
-      render();
-    })();
+      if (reduced) return;
+
+      new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && !running) {
+          running = true;
+          loop();
+        } else if (!entry.isIntersecting) {
+          running = false;
+          cancelAnimationFrame(raf);
+        }
+      }).observe(section);
+    }
+
+    /* Hero: el efecto completo */
+    particleField(document.querySelector('.hero'), document.querySelector('.hero-circuit'));
+
+    /* Franja de contacto: misma idea, mas tranquila (menos puntos, mas
+       tenues y mas lentos) para no competir con el boton de WhatsApp */
+    particleField(document.querySelector('.cta-band'), document.querySelector('.cta-circuit'),
+      { n: 45, alpha: 0.6, speed: 0.7, connect: 120 });
 
     /* -------------------------------------------------------------------------
        5. LINK ACTIVO EN LA BARRA
@@ -1318,6 +1354,42 @@
 
       openFromHash();
       window.addEventListener('hashchange', openFromHash);
+    })();
+
+    /* -------------------------------------------------------------------------
+       9b. VIDEO DE CASO EN PANTALLA COMPLETA
+       Un video de sistema grabado en 1920px se ve chico dentro de la pagina:
+       la interfaz no se llega a leer. El boton .case-video-full (o un click
+       sobre el video) lo abre en pantalla completa, desde el principio y con
+       controles para pausar/adelantar. Al salir, los controles se van y el
+       video sigue en loop mudo como antes.
+       Para sumarlo a otro caso: envolver el <video> en .case-video y copiar
+       el boton (ver caso-estudio).
+    ------------------------------------------------------------------------- */
+    (function () {
+      function goFull(video) {
+        video.controls = true;
+        video.currentTime = 0;
+        video.play().catch(() => {});
+        if (video.requestFullscreen) video.requestFullscreen().catch(() => {});
+        else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen(); /* iPhone */
+      }
+
+      document.querySelectorAll('.case-video').forEach(wrap => {
+        const video = wrap.querySelector('video');
+        const btn = wrap.querySelector('.case-video-full');
+        if (!video || !btn) return;
+        btn.addEventListener('click', () => goFull(video));
+        video.addEventListener('click', () => {
+          if (!document.fullscreenElement) goFull(video);
+        });
+        video.addEventListener('webkitendfullscreen', () => { video.controls = false; });
+      });
+
+      document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) return;
+        document.querySelectorAll('.case-video video').forEach(v => { v.controls = false; });
+      });
     })();
 
     /* -------------------------------------------------------------------------
